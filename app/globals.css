@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 201 100% 32%; /* #0075A2 */
+    --primary-foreground: 0 0% 98%;
+    --primary-light: 201 100% 92%; /* #E6F1F6 */
+    --primary-dark: 201 100% 22%; /* #004661 */
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 201 100% 92%; /* #E6F1F6 */
+    --accent-foreground: 201 100% 32%; /* #0075A2 */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 201 100% 90%; /* #CCE3EC */
+    --input: 201 100% 90%; /* #CCE3EC */
+    --ring: 201 100% 32%; /* #0075A2 */
+    --chart-1: 201 100% 32%; /* #0075A2 */
+    --chart-2: 201 100% 45%; /* #3391B5 */
+    --chart-3: 201 100% 58%; /* #66ACC7 */
+    --chart-4: 201 100% 71%; /* #99C8DA */
+    --chart-5: 201 100% 84%; /* #CCE3EC */
+    --radius: 0.5rem;
+    --sidebar-background: 201 100% 98%; /* #F5F9FB */
+    --sidebar-foreground: 201 100% 32%; /* #0075A2 */
+    --sidebar-primary: 201 100% 32%; /* #0075A2 */
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 201 100% 92%; /* #E6F1F6 */
+    --sidebar-accent-foreground: 201 100% 32%; /* #0075A2 */
+    --sidebar-border: 201 100% 90%; /* #CCE3EC */
+    --sidebar-ring: 201 100% 32%; /* #0075A2 */
+  }
+  .dark {
+    --background: 201 100% 10%; /* #001720 */
+    --foreground: 201 100% 98%;
+    --card: 201 100% 15%; /* #002331 */
+    --card-foreground: 201 100% 98%;
+    --popover: 201 100% 15%; /* #002331 */
+    --popover-foreground: 201 100% 98%;
+    --primary: 201 100% 60%; /* #66ACC7 */
+    --primary-foreground: 201 100% 10%; /* #001720 */
+    --secondary: 201 100% 20%; /* #002F41 */
+    --secondary-foreground: 201 100% 98%;
+    --muted: 201 100% 20%; /* #002F41 */
+    --muted-foreground: 201 100% 70%;
+    --accent: 201 100% 25%; /* #003B51 */
+    --accent-foreground: 201 100% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 201 100% 98%;
+    --border: 201 100% 25%; /* #003B51 */
+    --input: 201 100% 25%; /* #003B51 */
+    --ring: 201 100% 60%; /* #66ACC7 */
+    --chart-1: 201 100% 60%; /* #66ACC7 */
+    --chart-2: 201 100% 50%; /* #4D9EBE */
+    --chart-3: 201 100% 40%; /* #3391B5 */
+    --chart-4: 201 100% 30%; /* #1A83AB */
+    --chart-5: 201 100% 20%; /* #0075A2 */
+    --sidebar-background: 201 100% 15%; /* #002331 */
+    --sidebar-foreground: 201 100% 98%;
+    --sidebar-primary: 201 100% 60%; /* #66ACC7 */
+    --sidebar-primary-foreground: 201 100% 10%; /* #001720 */
+    --sidebar-accent: 201 100% 20%; /* #002F41 */
+    --sidebar-accent-foreground: 201 100% 98%;
+    --sidebar-border: 201 100% 25%; /* #003B51 */
+    --sidebar-ring: 201 100% 60%; /* #66ACC7 */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Hide default text and use a custom SVG for navigation */
+.rdp-nav_button {
+  position: relative;
+  color: transparent; /* Hide text */
+}
+
+.rdp-nav_button[aria-label="Previous month"]::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background: url('/path/to/chevron-left.svg') no-repeat center center;
+  background-size: contain;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.rdp-nav_button[aria-label="Next month"]::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background: url('/path/to/chevron-right.svg') no-repeat center center;
+  background-size: contain;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
