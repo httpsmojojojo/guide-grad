@@ -29,7 +29,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { getAmbassadors, connectWithAmbassador, bookAmbassadorCall, type Ambassador } from "@/lib/data"
+import { ambassadorsApi, type Ambassador } from "@/lib/api"
 import { toast } from "sonner"
 import { SuccessModal } from "@/components/SuccessModal"
 import { ErrorModal } from "@/components/ErrorModal"
@@ -38,8 +38,12 @@ import { Modal, ModalContent } from "@/components/ui/modal"
 
 export default function AmbassadorsPage() {
   const [ambassadors, setAmbassadors] = useState<Ambassador[]>([])
-  const [loading, setLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState("")
+  const [isMessageDialogOpen, setIsMessageDialogOpen] = useState(false)
   const [selectedAmbassador, setSelectedAmbassador] = useState<Ambassador | null>(null)
+  const [message, setMessage] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [showMessageDialog, setShowMessageDialog] = useState(false)
   const [showComingSoonDialog, setShowComingSoonDialog] = useState(false)
   const [showApplicationsClosedDialog, setShowApplicationsClosedDialog] = useState(false)
@@ -49,70 +53,21 @@ export default function AmbassadorsPage() {
   const [isMessageInfoModalOpen, setIsMessageInfoModalOpen] = useState(false)
   const [isApplyInfoModalOpen, setIsApplyInfoModalOpen] = useState(false)
 
-  // Message form state
-  const [messageData, setMessageData] = useState({
-    subject: "",
-    message: "",
-    contactMethod: "message",
-  })
-
-  const timeSlots = [
-    "09:00 AM",
-    "10:00 AM",
-    "11:00 AM",
-    "12:00 PM",
-    "02:00 PM",
-    "03:00 PM",
-    "04:00 PM",
-    "05:00 PM",
-    "06:00 PM",
-  ]
-
-  // Load ambassadors on component mount
   useEffect(() => {
-    const initializeData = async () => {
-      try {
-        await loadAmbassadors()
-      } catch (error) {
-        console.error("Failed to initialize data:", error)
-      }
-    }
-
-    initializeData()
+    loadAmbassadors()
   }, [])
 
   const loadAmbassadors = async () => {
     try {
-      setLoading(true)
-      const data = await getAmbassadors()
+      setIsLoading(true)
+      const data = await ambassadorsApi.getAmbassadors()
+      console.log('Fetched ambassadors:', data)
       setAmbassadors(data)
     } catch (error) {
       toast.error("Failed to load ambassadors")
       setAmbassadors([]) // Set empty array on error
     } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!selectedAmbassador) return
-
-    try {
-      await connectWithAmbassador(selectedAmbassador.id, {
-        type: "message",
-        subject: messageData.subject,
-        message: messageData.message,
-        contactMethod: messageData.contactMethod,
-      })
-
-      setIsSuccessModalOpen(true)
-      setShowMessageDialog(false)
-      setMessageData({ subject: "", message: "", contactMethod: "message" })
-      setSelectedAmbassador(null)
-    } catch (error) {
-      setErrorMessage("Failed to send message. Please try again.")
-      setIsErrorModalOpen(true)
+      setIsLoading(false)
     }
   }
 
@@ -124,7 +79,7 @@ export default function AmbassadorsPage() {
     setIsApplyInfoModalOpen(true)
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -168,65 +123,6 @@ export default function AmbassadorsPage() {
           <p className="text-gray-600 mb-6">
             Send a message to connect with the ambassador. They typically respond within 24 hours.
           </p>
-          <form onSubmit={handleSendMessage} className="space-y-4">
-            <div>
-              <Label htmlFor="subject">Subject</Label>
-              <Input
-                id="subject"
-                value={messageData.subject}
-                onChange={(e) => setMessageData({ ...messageData, subject: e.target.value })}
-                placeholder="Enter message subject"
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="message">Message</Label>
-              <Textarea
-                id="message"
-                value={messageData.message}
-                onChange={(e) => setMessageData({ ...messageData, message: e.target.value })}
-                placeholder="Type your message here..."
-                required
-              />
-            </div>
-            <div>
-              <Label>Preferred Contact Method</Label>
-              <div className="flex space-x-4 mt-2">
-                <Button
-                  type="button"
-                  variant={messageData.contactMethod === "message" ? "default" : "outline"}
-                  className={messageData.contactMethod === "message" ? "bg-primary hover:bg-primary-dark" : ""}
-                  onClick={() => setMessageData({ ...messageData, contactMethod: "message" })}
-                >
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Message
-                </Button>
-                <Button
-                  type="button"
-                  variant={messageData.contactMethod === "email" ? "default" : "outline"}
-                  className={messageData.contactMethod === "email" ? "bg-primary hover:bg-primary-dark" : ""}
-                  onClick={() => setMessageData({ ...messageData, contactMethod: "email" })}
-                >
-                  <Mail className="w-4 h-4 mr-2" />
-                  Email
-                </Button>
-              </div>
-            </div>
-            <div className="flex justify-end space-x-2 mt-6">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setShowMessageDialog(false)}
-                className="border-primary text-primary hover:bg-primary-light"
-              >
-                Cancel
-              </Button>
-              <Button type="submit" className="bg-primary hover:bg-primary-dark">
-                <Send className="w-4 h-4 mr-2" />
-                Send Message
-              </Button>
-            </div>
-          </form>
         </div>
       </Modal>
       <div className="container mx-auto px-4 py-8">
@@ -273,7 +169,7 @@ export default function AmbassadorsPage() {
                   <div className="flex items-center space-x-4">
                     <div className="relative">
                       <Image
-                        src={ambassador.image || "/placeholder.svg"}
+                        src={(ambassador as any).image || ambassador.imageUrl || "/placeholder.svg"}
                         alt={ambassador.name}
                         width={60}
                         height={60}
@@ -287,10 +183,12 @@ export default function AmbassadorsPage() {
                       <CardDescription>
                         {ambassador.university} • {ambassador.program}
                       </CardDescription>
-                      <div className="flex items-center mt-1">
-                        <MapPin className="w-3 h-3 text-gray-400 mr-1" />
-                        <span className="text-xs text-gray-500">{ambassador.location}</span>
-                      </div>
+                      {(ambassador as any).location && (
+                        <div className="flex items-center mt-1">
+                          <MapPin className="w-3 h-3 text-gray-400 mr-1" />
+                          <span className="text-xs text-gray-500">{(ambassador as any).location}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -318,6 +216,16 @@ export default function AmbassadorsPage() {
                         )}
                       </div>
                     </div>
+                    {(ambassador as any).languages && (ambassador as any).languages.length > 0 && (
+                      <div className="mt-2">
+                        <p className="text-xs text-gray-500 mb-1">Languages:</p>
+                        <div className="flex flex-wrap gap-1">
+                          {(ambassador as any).languages.map((lang: string, idx: number) => (
+                            <Badge key={lang + idx} variant="secondary" className="text-xs bg-primary-light text-primary whitespace-nowrap">{lang}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className="flex space-x-2 mt-auto">
                     <Button

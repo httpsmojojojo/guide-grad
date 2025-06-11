@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -11,30 +11,25 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import {
-  BookOpen,
   Mail,
   Phone,
-  MapPin,
   Clock,
-  ArrowLeft,
   Send,
-  MessageCircle,
-  HelpCircle,
   Users,
   CheckCircle,
   AlertCircle,
   Loader2,
   Star,
-  Globe,
   Calendar,
 } from "lucide-react"
 import Link from "next/link"
-import { contactAction } from "@/lib/actions"
 import { SuccessModal } from "@/components/SuccessModal"
 import { ErrorModal } from "@/components/ErrorModal"
+import { contactApi } from "@/lib/api/contact"
+import type { ContactFormData } from "@/lib/api/contact"
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
     phone: "",
@@ -46,7 +41,6 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [activeOffice, setActiveOffice] = useState(0)
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
@@ -75,12 +69,8 @@ export default function ContactPage() {
     setSubmitStatus("idle")
 
     try {
-      const formDataObj = new FormData()
-      Object.entries(formData).forEach(([key, value]) => {
-        formDataObj.append(key, value)
-      })
-
-      await contactAction(formDataObj)
+      await contactApi.submitContactForm(formData)
+      setSubmitStatus("success")
       setIsSuccessModalOpen(true)
       setFormData({
         name: "",
@@ -90,15 +80,16 @@ export default function ContactPage() {
         category: "",
         message: "",
       })
-    } catch (error) {
-      setErrorMessage("Failed to send message. Please try again.")
+    } catch (error: any) {
+      setSubmitStatus("error")
+      setErrorMessage(error.message || "Failed to send message. Please try again.")
       setIsErrorModalOpen(true)
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: keyof ContactFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: "" }))
@@ -188,6 +179,7 @@ export default function ContactPage() {
           ))}
         </div>
 
+        {/* Contact Form */}
         <div className="flex justify-center items-center mb-12">
           <Card className="border-primary-light max-w-lg w-full mx-auto">
             <CardHeader>
@@ -195,115 +187,96 @@ export default function ContactPage() {
               <CardDescription>Fill out the form below and we'll get back to you as soon as possible</CardDescription>
             </CardHeader>
             <CardContent>
-              {submitStatus === "success" && (
-                <Alert className="mb-6 border-green-200 bg-green-50">
-                  <CheckCircle className="h-4 w-4 text-green-600" />
-                  <AlertDescription className="text-green-800">
-                    Thank you for your message! We'll get back to you within 24 hours.
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              {submitStatus === "error" && (
-                <Alert className="mb-6 border-red-200 bg-red-50">
-                  <AlertCircle className="h-4 w-4 text-red-600" />
-                  <AlertDescription className="text-red-800">
-                    There was an error sending your message. Please try again.
-                  </AlertDescription>
-                </Alert>
-              )}
-
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="name">Full Name *</Label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Name</Label>
                     <Input
                       id="name"
-                      placeholder="Your full name"
                       value={formData.name}
                       onChange={(e) => handleInputChange("name", e.target.value)}
+                      placeholder="Your name"
                       className={errors.name ? "border-red-500" : ""}
-                      required
                     />
-                    {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                    {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
                   </div>
-                  <div>
-                    <Label htmlFor="email">Email *</Label>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
                       type="email"
-                      placeholder="your@email.com"
                       value={formData.email}
                       onChange={(e) => handleInputChange("email", e.target.value)}
+                      placeholder="your.email@example.com"
                       className={errors.email ? "border-red-500" : ""}
-                      required
                     />
-                    {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                    {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
                   </div>
                 </div>
 
-                <div>
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="+92-300-1234567"
-                    value={formData.phone}
-                    onChange={(e) => handleInputChange("phone", e.target.value)}
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Phone (Optional)</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                      placeholder="Your phone number"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="category">Category</Label>
+                    <Select
+                      value={formData.category}
+                      onValueChange={(value) => handleInputChange("category", value)}
+                    >
+                      <SelectTrigger className={errors.category ? "border-red-500" : ""}>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="general">General Inquiry</SelectItem>
+                        <SelectItem value="support">Technical Support</SelectItem>
+                        <SelectItem value="feedback">Feedback</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {errors.category && <p className="text-sm text-red-500">{errors.category}</p>}
+                  </div>
                 </div>
 
-                <div>
-                  <Label htmlFor="category">Category *</Label>
-                  <Select onValueChange={(value) => handleInputChange("category", value)}>
-                    <SelectTrigger className={errors.category ? "border-red-500" : ""}>
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="general">General Inquiry</SelectItem>
-                      <SelectItem value="support">Student Support</SelectItem>
-                      <SelectItem value="university">University Information</SelectItem>
-                      <SelectItem value="scholarship">Scholarship Guidance</SelectItem>
-                      <SelectItem value="technical">Technical Support</SelectItem>
-                      <SelectItem value="partnership">Partnership</SelectItem>
-                      <SelectItem value="feedback">Feedback</SelectItem>
-                      <SelectItem value="complaint">Complaint</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
-                </div>
-
-                <div>
-                  <Label htmlFor="subject">Subject *</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="subject">Subject</Label>
                   <Input
                     id="subject"
-                    placeholder="Brief description of your inquiry"
                     value={formData.subject}
                     onChange={(e) => handleInputChange("subject", e.target.value)}
+                    placeholder="What is this regarding?"
                     className={errors.subject ? "border-red-500" : ""}
-                    required
                   />
-                  {errors.subject && <p className="text-red-500 text-sm mt-1">{errors.subject}</p>}
+                  {errors.subject && <p className="text-sm text-red-500">{errors.subject}</p>}
                 </div>
 
-                <div>
-                  <Label htmlFor="message">Message *</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="message">Message</Label>
                   <Textarea
                     id="message"
-                    placeholder="Please provide details about your inquiry..."
                     value={formData.message}
                     onChange={(e) => handleInputChange("message", e.target.value)}
-                    rows={5}
+                    placeholder="Your message..."
                     className={errors.message ? "border-red-500" : ""}
-                    required
+                    rows={5}
                   />
-                  <div className="flex justify-between items-center mt-1">
-                    {errors.message && <p className="text-red-500 text-sm">{errors.message}</p>}
-                    <p className="text-gray-500 text-sm ml-auto">{formData.message.length}/500</p>
-                  </div>
+                  {errors.message && <p className="text-sm text-red-500">{errors.message}</p>}
                 </div>
 
-                <Button type="submit" className="w-full bg-primary hover:bg-primary-dark" disabled={isSubmitting}>
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-primary-dark"
+                  disabled={isSubmitting}
+                >
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />

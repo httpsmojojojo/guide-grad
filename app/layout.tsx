@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Navbar } from '@/components/Navbar'
+import { Suspense } from 'react'
 
 export const metadata: Metadata = {
   title: 'Guide Grad',
@@ -16,8 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        {children}
+        <Suspense fallback={<div>Loading...</div>}>
+          <Navbar />
+          {children}
+        </Suspense>
       </body>
     </html>
   )

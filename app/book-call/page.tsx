@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,20 +9,23 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { BookOpen, CalendarIcon, Clock, User, Phone, Video, ArrowLeft, CheckCircle } from "lucide-react"
+import { BookOpen, CalendarIcon, Clock, User, Phone, Video, ArrowLeft, CheckCircle, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { Logo } from "@/components/Logo"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { SuccessModal } from "@/components/SuccessModal"
 import { ErrorModal } from "@/components/ErrorModal"
+import { bookingsApi } from "@/lib/api/bookings"
+import type { BookingFormData } from "@/lib/api/bookings"
 
 export default function BookCallPage() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
-  const [formData, setFormData] = useState({
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formData, setFormData] = useState<BookingFormData>({
     name: "",
     email: "",
     phone: "",
@@ -31,6 +33,7 @@ export default function BookCallPage() {
     preferredMethod: "",
     topic: "",
     message: "",
+    date: new Date()
   })
 
   const consultationTypes = [
@@ -41,42 +44,88 @@ export default function BookCallPage() {
     { value: "general-guidance", label: "General Guidance", duration: "30 min" },
   ]
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      setErrorMessage("Name is required")
+      return false
+    }
+    if (!formData.email.trim()) {
+      setErrorMessage("Email is required")
+      return false
+    }
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      setErrorMessage("Invalid email format")
+      return false
+    }
+    if (!formData.phone.trim()) {
+      setErrorMessage("Phone number is required")
+      return false
+    }
+    if (!formData.consultationType) {
+      setErrorMessage("Please select a consultation type")
+      return false
+    }
+    if (!formData.preferredMethod) {
+      setErrorMessage("Please select a preferred method")
+      return false
+    }
+    if (!selectedDate) {
+      setErrorMessage("Please select a date")
+      return false
+    }
+    return true
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Form submission started")
-    console.log("Current form data:", formData)
-    console.log("Selected date:", selectedDate)
     
-    if (!formData.consultationType || !formData.preferredMethod) {
-      console.log("Missing required fields:", {
-        consultationType: formData.consultationType,
-        preferredMethod: formData.preferredMethod
-      })
-      setErrorMessage("Please select both consultation type and preferred method")
+    if (!validateForm()) {
       setIsErrorModalOpen(true)
       return
     }
 
-    const submission = { ...formData, date: selectedDate }
-    console.log("Booking submitted:", submission)
-    setIsSuccessModalOpen(true)
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      consultationType: "",
-      preferredMethod: "",
-      topic: "",
-      message: "",
-    })
-    setSelectedDate(undefined)
+    setIsSubmitting(true)
+    try {
+      if (!selectedDate) {
+        throw new Error("Please select a date")
+      }
+      
+      const bookingData: BookingFormData = {
+        ...formData,
+        date: selectedDate
+      }
+      await bookingsApi.submitBooking(bookingData)
+      setIsSuccessModalOpen(true)
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        consultationType: "",
+        preferredMethod: "",
+        topic: "",
+        message: "",
+        date: new Date()
+      })
+      setSelectedDate(undefined)
+    } catch (error: any) {
+      setErrorMessage(error.message || "Failed to book consultation. Please try again.")
+      setIsErrorModalOpen(true)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleInputChange = (field: keyof BookingFormData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <SuccessModal 
         isOpen={isSuccessModalOpen} 
-        onClose={() => setIsSuccessModalOpen(false)} 
+        onClose={() => setIsSuccessModalOpen(false)}
+        title="Booking Successful!"
+        message="Thank you for booking a consultation. We'll get back to you within 24 hours to confirm your appointment."
       />
       <ErrorModal
         isOpen={isErrorModalOpen}
@@ -134,7 +183,7 @@ export default function BookCallPage() {
                         name="name"
                         placeholder="Your full name"
                         value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onChange={(e) => handleInputChange("name", e.target.value)}
                         required
                       />
                     </div>
@@ -146,7 +195,7 @@ export default function BookCallPage() {
                         type="email"
                         placeholder="your@email.com"
                         value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        onChange={(e) => handleInputChange("email", e.target.value)}
                         required
                       />
                     </div>
@@ -159,7 +208,7 @@ export default function BookCallPage() {
                       type="tel"
                       placeholder="+92-300-1234567"
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      onChange={(e) => handleInputChange("phone", e.target.value)}
                       required
                     />
                   </div>
@@ -186,10 +235,7 @@ export default function BookCallPage() {
                     <Select 
                       name="consultationType"
                       value={formData.consultationType}
-                      onValueChange={(value) => {
-                        console.log("Consultation type changed:", value)
-                        setFormData({ ...formData, consultationType: value })
-                      }}
+                      onValueChange={(value) => handleInputChange("consultationType", value)}
                       required
                     >
                       <SelectTrigger>
@@ -198,12 +244,7 @@ export default function BookCallPage() {
                       <SelectContent>
                         {consultationTypes.map((type) => (
                           <SelectItem key={type.value} value={type.value}>
-                            <div className="flex items-center justify-between w-full">
-                              <span>{type.label}</span>
-                              <Badge variant="secondary" className="ml-2">
-                                {type.duration}
-                              </Badge>
-                            </div>
+                            {type.label} ({type.duration})
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -212,23 +253,20 @@ export default function BookCallPage() {
 
                   <div>
                     <Label htmlFor="preferredMethod">Preferred Method</Label>
-                    <Select 
+                    <Select
                       name="preferredMethod"
                       value={formData.preferredMethod}
-                      onValueChange={(value) => {
-                        console.log("Preferred method changed:", value)
-                        setFormData({ ...formData, preferredMethod: value })
-                      }}
+                      onValueChange={(value) => handleInputChange("preferredMethod", value)}
                       required
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="How would you like to meet?" />
+                        <SelectValue placeholder="Select preferred method" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="video">
                           <div className="flex items-center">
                             <Video className="w-4 h-4 mr-2" />
-                            Video Call (Zoom/Google Meet)
+                            Video Call
                           </div>
                         </SelectItem>
                         <SelectItem value="phone">
@@ -242,30 +280,45 @@ export default function BookCallPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="topic">Main Topic/Question</Label>
+                    <Label htmlFor="topic">Topic (Optional)</Label>
                     <Input
                       id="topic"
+                      name="topic"
                       placeholder="What would you like to discuss?"
                       value={formData.topic}
-                      onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
+                      onChange={(e) => handleInputChange("topic", e.target.value)}
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="message">Additional Information</Label>
+                    <Label htmlFor="message">Additional Information (Optional)</Label>
                     <Textarea
                       id="message"
-                      placeholder="Tell us more about your goals, current situation, or any specific questions you have..."
+                      name="message"
+                      placeholder="Any specific questions or concerns you'd like to address?"
                       value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      onChange={(e) => handleInputChange("message", e.target.value)}
                       rows={4}
                     />
                   </div>
                 </div>
 
-                <Button type="submit" className="w-full bg-primary hover:bg-primary-dark">
-                  <CalendarIcon className="w-4 h-4 mr-2" />
-                  Schedule Consultation
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-primary-dark"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Booking...
+                    </>
+                  ) : (
+                    <>
+                      <CalendarIcon className="w-4 h-4 mr-2" />
+                      Book Consultation
+                    </>
+                  )}
                 </Button>
               </form>
             </CardContent>

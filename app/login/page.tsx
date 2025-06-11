@@ -4,11 +4,13 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { loginAction } from "@/lib/actions"
+import { AlertCircle } from "lucide-react"
 import Link from "next/link"
-import { ArrowLeft, AlertCircle } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { authApi } from "@/lib/api"
 
 export default function LoginPage() {
+  const router = useRouter()
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -17,11 +19,15 @@ export default function LoginPage() {
     setError("")
     setIsSubmitting(true)
 
+    const formData = new FormData(e.currentTarget)
+    const email = formData.get("email") as string
+    const password = formData.get("password") as string
+
     try {
-      const formData = new FormData(e.currentTarget)
-      await loginAction(formData)
-    } catch (err) {
-      setError("Invalid email or password")
+      await authApi.signIn({ email, password })
+      router.push("/dashboard")
+    } catch (err: any) {
+      setError(err.message || "Invalid email or password")
     } finally {
       setIsSubmitting(false)
     }

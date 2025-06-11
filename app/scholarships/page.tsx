@@ -32,7 +32,7 @@ import {
   CheckCircle,
 } from "lucide-react"
 import Link from "next/link"
-import { getScholarships, applyForScholarship, type Scholarship } from "@/lib/data"
+import { scholarshipsApi, type Scholarship } from "@/lib/api"
 import { toast } from "sonner"
 import { Logo } from "@/components/Logo"
 
@@ -50,7 +50,7 @@ export default function ScholarshipsPage() {
   const loadScholarships = async () => {
     try {
       setLoading(true)
-      const data = await getScholarships()
+      const { scholarships: data } = await scholarshipsApi.getScholarships()
       setScholarships(data)
     } catch (error) {
       toast.error("Failed to load scholarships")
@@ -177,12 +177,7 @@ export default function ScholarshipsPage() {
                               <Badge variant="secondary" className={`${deadlineStatus.bg} ${deadlineStatus.color}`}>
                                 {daysLeft > 0 ? `${daysLeft} days left` : "Expired"}
                               </Badge>
-                              <Badge
-                                variant={scholarship.status === "Open" ? "default" : "secondary"}
-                                className={scholarship.status === "Open" ? "bg-primary" : ""}
-                              >
-                                {scholarship.status}
-                              </Badge>
+                              {/* No status field in Firestore Scholarship type; badge omitted */}
                             </div>
                             <h3
                               className="font-semibold text-lg text-gray-900 hover:text-primary cursor-pointer"
@@ -190,7 +185,7 @@ export default function ScholarshipsPage() {
                             >
                               {scholarship.title}
                             </h3>
-                            <p className="text-primary font-medium">{scholarship.provider}</p>
+                            <p className="text-primary font-medium">{scholarship.university}</p>
                           </div>
                         </div>
 
@@ -205,30 +200,15 @@ export default function ScholarshipsPage() {
                             <span className="text-gray-600">Type:</span>
                             <span className="font-medium ml-1">{scholarship.type}</span>
                           </div>
-                          <div>
-                            <span className="text-gray-600">Level:</span>
-                            <span className="font-medium ml-1">{scholarship.level}</span>
-                          </div>
                           <div className="flex items-center">
                             <Clock className="w-4 h-4 text-primary mr-1" />
                             <span className="text-primary font-medium">{scholarship.deadline}</span>
                           </div>
                         </div>
 
-                        <div>
-                          <p className="text-xs text-gray-500 mb-2">Fields:</p>
-                          <div className="flex flex-wrap gap-1">
-                            {scholarship.fields.map((field, index) => (
-                              <Badge key={index} variant="outline" className="text-xs">
-                                {field}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-
                         <div className="flex items-center justify-between pt-2">
                           <div className="text-xs text-gray-500">
-                            {scholarship.applicants} applicants • {scholarship.awards} awards
+                            {/* No level, fields, applicants, or awards fields in Firestore Scholarship type; section omitted */}
                           </div>
                           <div className="flex space-x-2">
                             <Button variant="outline" size="sm" onClick={() => openDetailsDialog(scholarship)}>
@@ -259,104 +239,32 @@ export default function ScholarshipsPage() {
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{selectedScholarship?.title}</DialogTitle>
-            <DialogDescription>{selectedScholarship?.provider}</DialogDescription>
+            <DialogDescription>{selectedScholarship?.university}</DialogDescription>
           </DialogHeader>
           {selectedScholarship && (
-            <div className="space-y-6">
-              {/* Overview */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="font-semibold mb-3">Overview</h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Amount:</span>
-                      <span className="font-medium text-primary">{selectedScholarship.amount}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Type:</span>
-                      <span className="font-medium">{selectedScholarship.type}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Level:</span>
-                      <span className="font-medium">{selectedScholarship.level}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Deadline:</span>
-                      <span className="font-medium text-primary">{selectedScholarship.deadline}</span>
-                    </div>
+            <div className="space-y-4">
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex-1">
+                  <p className="text-gray-700 mb-2">{selectedScholarship.description}</p>
+                  <div className="mb-2">
+                    <span className="font-medium">Amount:</span> {selectedScholarship.amount}
+                  </div>
+                  <div className="mb-2">
+                    <span className="font-medium">Deadline:</span> {selectedScholarship.deadline}
+                  </div>
+                  <div className="mb-2">
+                    <span className="font-medium">Type:</span> {selectedScholarship.type}
+                  </div>
+                  <div className="mb-2">
+                    <span className="font-medium">University:</span> {selectedScholarship.university}
+                  </div>
+                  <div className="mb-2">
+                    <span className="font-medium">Program:</span> {selectedScholarship.program}
+                  </div>
+                  <div className="mb-2">
+                    <span className="font-medium">Requirements:</span> {selectedScholarship.requirements && selectedScholarship.requirements.join(", ")}
                   </div>
                 </div>
-                <div>
-                  <h4 className="font-semibold mb-3">Application Stats</h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Applicants:</span>
-                      <span className="font-medium">{selectedScholarship.applicants}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Awards:</span>
-                      <span className="font-medium">{selectedScholarship.awards}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Success Rate:</span>
-                      <span className="font-medium text-primary">
-                        {Math.round(
-                          (Number.parseInt(selectedScholarship.awards) /
-                            Number.parseInt(selectedScholarship.applicants.replace(/[^\d]/g, ""))) *
-                            100,
-                        )}
-                        %
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div>
-                <h4 className="font-semibold mb-3">Description</h4>
-                <p className="text-gray-600">{selectedScholarship.description}</p>
-              </div>
-
-              {/* Eligibility */}
-              <div>
-                <h4 className="font-semibold mb-3">Eligibility Criteria</h4>
-                <p className="text-gray-600">{selectedScholarship.eligibility}</p>
-              </div>
-
-              {/* Requirements */}
-              <div>
-                <h4 className="font-semibold mb-3">Required Documents</h4>
-                <ul className="space-y-2">
-                  {selectedScholarship.requirements.map((req, index) => (
-                    <li key={index} className="flex items-start">
-                      <CheckCircle className="w-4 h-4 text-primary mt-0.5 mr-3 flex-shrink-0" />
-                      <span className="text-gray-600">{req}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Fields */}
-              <div>
-                <h4 className="font-semibold mb-3">Eligible Fields</h4>
-                <div className="flex flex-wrap gap-2">
-                  {selectedScholarship.fields.map((field, index) => (
-                    <Badge key={index} variant="outline">
-                      {field}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex justify-between items-center pt-4 border-t">
-                <Button
-                  className="bg-primary hover:bg-primary-dark"
-                  onClick={() => window.open(selectedScholarship.applicationUrl, '_blank')}
-                >
-                  Visit Website
-                </Button>
               </div>
             </div>
           )}

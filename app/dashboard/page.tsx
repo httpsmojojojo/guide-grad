@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Input } from "@/components/ui/input"
@@ -24,118 +24,132 @@ import {
   Save,
 } from "lucide-react"
 import Link from "next/link"
-import { Logo } from "@/components/Logo"
-import { getUniversityById, type University } from "@/lib/data"
 import { useRouter } from "next/navigation"
-
-interface ProfileData {
-  firstName: string
-  lastName: string
-  email: string
-  phone: string
-  city: string
-  currentEducation: string
-  interestedField: string
-  extracurricularActivities: string
-  personalStatement: string
-}
+import { authApi, profileApi, universitiesApi } from "@/lib/api"
+import type { ProfileData } from "@/lib/api/profile"
+import type { University } from "@/lib/api/universities"
 
 export default function Dashboard() {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState("overview")
   const [savedUniversities, setSavedUniversities] = useState<University[]>([])
-  const [loading, setLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
   const [profileData, setProfileData] = useState<ProfileData>({
-    firstName: "Ahmed",
-    lastName: "Khan",
-    email: "ahmed@example.com",
-    phone: "+92-333-7013724",
-    city: "Karachi",
-    currentEducation: "A-Levels",
-    interestedField: "Computer Science",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    city: "",
+    currentEducation: "",
+    interestedField: "",
     extracurricularActivities: "",
     personalStatement: "",
   })
-  const [profileCompletion, setProfileCompletion] = useState(85)
+  const [profileCompletion, setProfileCompletion] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState("")
 
-  const handleSignOut = () => {
-    // Clear any stored user data
-    localStorage.removeItem("savedUniversities")
-    // Add any other user data that needs to be cleared
-    
-    // Redirect to home page
-    router.push("/")
-  }
-
-  useEffect(() => {
-    loadSavedUniversities()
-    loadProfileData()
-  }, [])
-
-  const loadProfileData = () => {
-    const savedProfile = localStorage.getItem("userProfile")
-    if (savedProfile) {
-      setProfileData(JSON.parse(savedProfile))
+  const handleSignOut = async () => {
+    try {
+      await authApi.signOut()
+      router.push("/")
+    } catch (error: any) {
+      setError(error.message)
     }
   }
 
-  const saveProfileData = () => {
-    localStorage.setItem("userProfile", JSON.stringify(profileData))
-    setIsEditing(false)
-    // Recalculate profile completion
-    calculateProfileCompletion()
+  useEffect(() => {
+    loadDashboardData()
+  }, [])
+
+  const loadDashboardData = async () => {
+    setIsLoading(true)
+    setError("")
+    try {
+      // Load profile data
+      const profile = await profileApi.getProfile()
+      if (profile) {
+        setProfileData(profile)
+        calculateProfileCompletion(profile)
+      }
+
+      // Load saved universities
+      const universities = await universitiesApi.getSavedUniversities()
+      setSavedUniversities(universities)
+    } catch (error: any) {
+      setError(error.message)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  const calculateProfileCompletion = () => {
+  const saveProfileData = async () => {
+    try {
+      await profileApi.updateProfile(profileData)
+      setIsEditing(false)
+      calculateProfileCompletion(profileData)
+    } catch (error: any) {
+      setError(error.message)
+    }
+  }
+
+  const calculateProfileCompletion = (data: ProfileData) => {
     let completed = 0
     let total = 0
 
     // Basic Information
-    if (profileData.firstName) completed++
-    if (profileData.lastName) completed++
-    if (profileData.email) completed++
-    if (profileData.phone) completed++
-    if (profileData.city) completed++
+    if (data.firstName) completed++
+    if (data.lastName) completed++
+    if (data.email) completed++
+    if (data.phone) completed++
+    if (data.city) completed++
     total += 5
 
     // Academic Information
-    if (profileData.currentEducation) completed++
-    if (profileData.interestedField) completed++
+    if (data.currentEducation) completed++
+    if (data.interestedField) completed++
     total += 2
 
     // Additional Information
-    if (profileData.extracurricularActivities) completed++
-    if (profileData.personalStatement) completed++
+    if (data.extracurricularActivities) completed++
+    if (data.personalStatement) completed++
     total += 2
 
     const completion = Math.round((completed / total) * 100)
     setProfileCompletion(completion)
   }
 
-  const loadSavedUniversities = async () => {
-    try {
-      setLoading(true)
-      const saved = localStorage.getItem("savedUniversities")
-      if (saved) {
-        const savedIds = JSON.parse(saved)
-        const universities = await Promise.all(
-          savedIds.map((id: string) => getUniversityById(id))
-        )
-        setSavedUniversities(universities.filter((uni): uni is University => uni !== null))
-      }
-    } catch (error) {
-      console.error("Failed to load saved universities:", error)
-    } finally {
-      setLoading(false)
-    }
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading your dashboard...</p>
+        </div>
+      </div>
+    )
   }
 
-  const upcomingDeadlines = [
-    { university: "LUMS", program: "Computer Science", deadline: "March 15, 2024", status: "pending" },
-    { university: "IBA Karachi", program: "Business Administration", deadline: "March 20, 2024", status: "pending" },
-    { university: "NUST", program: "Engineering", deadline: "April 1, 2024", status: "completed" },
-  ]
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-2 text-red-600 bg-red-50 p-3 rounded-lg">
+              <AlertCircle className="w-4 h-4" />
+              <span className="text-sm">{error}</span>
+            </div>
+            <Button 
+              onClick={loadDashboardData} 
+              className="w-full mt-4"
+            >
+              Try Again
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -166,6 +180,14 @@ export default function Dashboard() {
             >
               <Award className="w-4 h-4 mr-2" />
               Profile
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+              onClick={handleSignOut}
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
             </Button>
           </nav>
         </aside>
@@ -211,7 +233,7 @@ export default function Dashboard() {
                     </Link>
                     <Link href="/book-call" className="w-full">
                       <Button className="w-full h-20 flex flex-col items-center justify-center bg-primary hover:bg-primary-dark">
-                        <BookOpen className="w-6 h-6 mb-2" />
+                        <Calendar className="w-6 h-6 mb-2" />
                         Book a Call
                       </Button>
                     </Link>
@@ -222,32 +244,55 @@ export default function Dashboard() {
               {/* Saved Universities */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Star className="w-5 h-5 mr-2" />
-                    Saved Universities
-                  </CardTitle>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Star className="w-5 h-5 mr-2" />
+                      <CardTitle>Saved Universities</CardTitle>
+                    </div>
+                    <Link href="/universities">
+                      <Button variant="outline" size="sm">Explore More</Button>
+                    </Link>
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  {loading ? (
-                    <div className="flex items-center justify-center py-4">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-                    </div>
-                  ) : savedUniversities.length === 0 ? (
-                    <div className="text-center py-4 text-gray-500">
-                      No saved universities yet. Start exploring universities to save them!
+                  {savedUniversities.length === 0 ? (
+                    <div className="text-center py-8">
+                      <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">No saved universities yet</h3>
+                      <p className="text-gray-600 mb-4">Start exploring universities to save them to your dashboard.</p>
+                      <Link href="/universities">
+                        <Button className="bg-primary hover:bg-primary-dark">Explore Universities</Button>
+                      </Link>
                     </div>
                   ) : (
-                    <div className="space-y-4">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {savedUniversities.map((university) => (
-                        <div key={university.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                          <div>
-                            <p className="font-medium">{university.name}</p>
-                            <p className="text-sm text-gray-600">{university.programs[0]}</p>
-                          </div>
-                          <Link href={`/universities/${university.id}`}>
-                            <Button variant="outline" size="sm">View Details</Button>
-                          </Link>
-                        </div>
+                        <Card key={university.id} className="hover:shadow-lg transition-shadow">
+                          <CardHeader>
+                            <CardTitle>{university.name}</CardTitle>
+                            <CardDescription>{university.location}</CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-3">
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-gray-600">Programs</span>
+                                <Badge variant="secondary">{university.programs.length}</Badge>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-gray-600">Rating</span>
+                                <div className="flex items-center">
+                                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 mr-1" />
+                                  <span>{university.rating}</span>
+                                </div>
+                              </div>
+                              <Link href={`/universities/${university.id}`}>
+                                <Button variant="outline" className="w-full">
+                                  View Details
+                                </Button>
+                              </Link>
+                            </div>
+                          </CardContent>
+                        </Card>
                       ))}
                     </div>
                   )}
@@ -264,11 +309,7 @@ export default function Dashboard() {
                   <Button className="bg-primary hover:bg-primary-dark">Explore All Universities</Button>
                 </Link>
               </div>
-              {loading ? (
-                <div className="flex items-center justify-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                </div>
-              ) : savedUniversities.length === 0 ? (
+              {savedUniversities.length === 0 ? (
                 <Card className="text-center py-8">
                   <CardContent>
                     <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />

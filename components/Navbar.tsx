@@ -1,10 +1,13 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { ArrowLeft, LogOut } from "lucide-react"
+import { ArrowLeft, LogOut, LayoutDashboard } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Logo } from "./Logo"
+import { useEffect, useState } from "react"
+import { authApi } from "@/lib/api/auth"
+import type { User } from "firebase/auth"
 
 const Button = dynamic(() => import("@/components/ui/button").then(mod => mod.Button), {
   ssr: false,
@@ -16,14 +19,31 @@ export function Navbar() {
   const router = useRouter()
   const isHomePage = pathname === "/"
   const isDashboard = pathname.startsWith("/dashboard")
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
 
-  const handleSignOut = () => {
-    // Clear any stored user data
-    localStorage.removeItem("savedUniversities")
-    // Add any other user data that needs to be cleared
-    
-    // Redirect to home page
-    router.push("/")
+  useEffect(() => {
+    // Get initial auth state
+    setCurrentUser(authApi.getCurrentUser())
+
+    // Set up an interval to check auth state
+    const interval = setInterval(() => {
+      setCurrentUser(authApi.getCurrentUser())
+    }, 1000)
+
+    // Cleanup interval
+    return () => clearInterval(interval)
+  }, [])
+
+  const handleSignOut = async () => {
+    try {
+      await authApi.signOut()
+      // Clear any stored user data
+      localStorage.removeItem("savedUniversities")
+      // Redirect to home page
+      router.push("/")
+    } catch (error) {
+      console.error("Error signing out:", error)
+    }
   }
 
   return (
@@ -59,29 +79,39 @@ export function Navbar() {
           </Link>
         </nav>
         
-        {isDashboard ? (
-          <Button 
-            variant="ghost" 
-            className="text-red-600 hover:text-red-700 hover:bg-red-50"
-            onClick={handleSignOut}
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Sign Out
-          </Button>
-        ) : pathname !== "/signup" && pathname !== "/login" && (
-          <div className="flex items-center space-x-4">
-            <Link href="/login">
-              <Button variant="ghost" className="text-primary hover:text-primary/90">
-                Login
+        <div className="flex items-center space-x-4">
+          {currentUser ? (
+            <>
+              <Link href="/dashboard">
+                <Button variant="ghost" className="text-primary hover:text-primary/90">
+                  <LayoutDashboard className="w-4 h-4 mr-2" />
+                  Dashboard
+                </Button>
+              </Link>
+              <Button 
+                variant="ghost" 
+                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                onClick={handleSignOut}
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
               </Button>
-            </Link>
-            <Link href="/signup">
-              <Button className="bg-primary text-white hover:bg-primary/90">
-                Sign Up
-              </Button>
-            </Link>
-          </div>
-        )}
+            </>
+          ) : pathname !== "/signup" && pathname !== "/login" && (
+            <>
+              <Link href="/login">
+                <Button variant="ghost" className="text-primary hover:text-primary/90">
+                  Login
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button className="bg-primary text-white hover:bg-primary/90">
+                  Sign Up
+                </Button>
+              </Link>
+            </>
+          )}
+        </div>
       </div>
     </header>
   )

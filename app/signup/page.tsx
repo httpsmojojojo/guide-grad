@@ -8,10 +8,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
-import { BookOpen, ArrowLeft, CheckCircle, AlertCircle } from "lucide-react"
-import { signupAction } from "@/lib/actions"
+import { CheckCircle, AlertCircle } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { authApi, profileApi } from "@/lib/api"
 
 export default function SignUpPage() {
   const router = useRouter()
@@ -61,19 +61,45 @@ export default function SignUpPage() {
     setSubmitStatus("idle")
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      // Create user account
+      await authApi.signUp({
+        email: formData.email,
+        password: formData.password,
+        firstName: formData.firstName,
+        lastName: formData.lastName
+      })
 
-      // Mock successful signup
-      console.log("Account created:", formData)
+      // Create user profile
+      await profileApi.createProfile({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        city: formData.city,
+        currentEducation: formData.currentEducation,
+        interestedField: formData.interestedField,
+        extracurricularActivities: "",
+        personalStatement: ""
+      })
+
       setSubmitStatus("success")
 
       // Redirect to dashboard after success
       setTimeout(() => {
         router.push("/dashboard")
       }, 1500)
-    } catch (error) {
+    } catch (error: any) {
       setSubmitStatus("error")
+      // Check for specific Firebase error codes
+      if (error.message.includes("auth/email-already-in-use")) {
+        setErrors({
+          submit: "An account with this email already exists. Please login instead."
+        })
+      } else {
+        setErrors({
+          submit: error.message || "Failed to create account. Please try again."
+        })
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -262,7 +288,7 @@ export default function SignUpPage() {
               {submitStatus === "error" && (
                 <div className="flex items-center space-x-2 text-red-600 bg-red-50 p-3 rounded-lg">
                   <AlertCircle className="w-4 h-4" />
-                  <span className="text-sm">Something went wrong. Please try again.</span>
+                  <span className="text-sm">{errors.submit}</span>
                 </div>
               )}
 
