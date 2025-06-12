@@ -18,7 +18,7 @@ export interface Ambassador {
   program: string
   year: string
   bio: string
-  imageUrl: string
+  image: string
   email: string
   specialties: string[]
   rating: number

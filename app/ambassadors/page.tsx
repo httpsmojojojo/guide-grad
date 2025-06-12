@@ -169,7 +169,7 @@ export default function AmbassadorsPage() {
                   <div className="flex items-center space-x-4">
                     <div className="relative">
                       <Image
-                        src={(ambassador as any).image || ambassador.imageUrl || "/placeholder.svg"}
+                        src={ambassador.image || "/placeholder.svg"}
                         alt={ambassador.name}
                         width={60}
                         height={60}
