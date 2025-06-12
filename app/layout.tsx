@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Navbar } from '@/components/Navbar'
 import { Suspense } from 'react'
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: 'Guide Grad',
@@ -21,6 +22,7 @@ export default function RootLayout({
           <Navbar />
           {children}
         </Suspense>
+        <Analytics />
       </body>
     </html>
   )
