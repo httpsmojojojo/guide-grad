@@ -16,25 +16,17 @@ export interface Ambassador {
   name: string
   university: string
   program: string
-  year: string
   bio: string
   image: string
-  email: string
   specialties: string[]
-  rating: number
-  reviews: number
 }
 
 export interface AmbassadorApplication {
   name: string
-  email: string
   university: string
   program: string
-  year: string
   bio: string
   specialties: string[]
-  motivation: string
-  experience: string
 }
 
 export const ambassadorsApi = {
