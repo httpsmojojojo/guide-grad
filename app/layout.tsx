@@ -3,6 +3,7 @@ import './globals.css'
 import { Navbar } from '@/components/Navbar'
 import { Suspense } from 'react'
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 export const metadata: Metadata = {
   title: 'Guide Grad',
@@ -23,6 +24,7 @@ export default function RootLayout({
           {children}
         </Suspense>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
