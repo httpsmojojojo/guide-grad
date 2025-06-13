@@ -2,51 +2,37 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
 import {
   BookOpen,
   MapPin,
   Star,
-  ArrowLeft,
-  Heart,
-  Share2,
-  Users,
-  Calendar,
   DollarSign,
   GraduationCap,
   Building,
-  Award,
   Globe,
   Phone,
-  Mail,
-  ExternalLink,
-  MessageCircle,
-  Send,
   CheckCircle,
   Loader2,
   AlertCircle,
   BookmarkCheck,
   BookmarkPlus,
+  Calendar,
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { universitiesApi } from "@/lib/api"
 import type { University } from "@/lib/api/universities"
 import { toast } from "sonner"
-import { Logo } from "@/components/Logo"
+
+interface Program {
+  name: string
+  description: string
+  duration: string
+  degree: string
+}
 
 interface UniversityDetailClientProps {
   id: string
@@ -166,7 +152,7 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
         <div className="relative">
           <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
             <div className="relative h-64 md:h-80">
-              <Image src={university.imageUrl || "/placeholder.svg"} alt={university.name} fill className="object-cover" />
+              <Image src={university.image || "/placeholder.svg"} alt={university.name} fill className="object-cover" />
               {/* Floating Save Button */}
               <Button
                 variant="outline"
@@ -210,19 +196,19 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
         </div>
 
         {/* Quick Stats */}
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <Card>
             <CardContent className="p-6 text-center">
               <DollarSign className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">{university.tuitionFee}</div>
+              <div className="text-2xl font-bold text-gray-900">{university.tuition}</div>
               <div className="text-sm text-gray-600">Annual Tuition</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
               <GraduationCap className="w-8 h-8 text-green-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">{university.admissionDeadline}</div>
-              <div className="text-sm text-gray-600">Admission Deadline</div>
+              <div className="text-2xl font-bold text-gray-900">{university.acceptance}</div>
+              <div className="text-sm text-gray-600">Acceptance Rate</div>
             </CardContent>
           </Card>
           <Card>
@@ -242,7 +228,7 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
         </div>
 
         {/* Main Content */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-6">
           {/* Left Column */}
           <div className="md:col-span-2">
             <Tabs defaultValue="overview" className="w-full">
@@ -270,7 +256,15 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
                         <Phone className="w-5 h-5 text-gray-400 mr-3 mt-1" />
                         <div>
                           <h3 className="font-medium">Contact</h3>
-                          <p className="text-gray-600">{university.contact}</p>
+                          <p className="text-gray-600">{university.phone}</p>
+                          <p className="text-gray-600">{university.email}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start">
+                        <MapPin className="w-5 h-5 text-gray-400 mr-3 mt-1" />
+                        <div>
+                          <h3 className="font-medium">Address</h3>
+                          <p className="text-gray-600">{university.address}</p>
                         </div>
                       </div>
                     </div>
@@ -282,13 +276,17 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
                   <CardContent className="p-6">
                     <h2 className="text-xl font-semibold mb-4">Available Programs</h2>
                     <div className="space-y-4">
-                      {university.programs.map((program, index) => (
+                      {university.programs_detailed.map((program, index) => (
                         <div key={index} className="border rounded-lg p-4">
                           <h3 className="font-medium mb-2">{program.name}</h3>
                           <p className="text-gray-600 mb-2">{program.description}</p>
                           <div className="flex items-center text-sm text-gray-500">
                             <Calendar className="w-4 h-4 mr-1" />
                             Duration: {program.duration}
+                          </div>
+                          <div className="flex items-center text-sm text-gray-500 mt-1">
+                            <GraduationCap className="w-4 h-4 mr-1" />
+                            Degree: {program.degree}
                           </div>
                         </div>
                       ))}
@@ -318,62 +316,39 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
           <div>
             <Card className="sticky top-8">
               <CardHeader>
-                <CardTitle>Contact University</CardTitle>
-                <CardDescription>
-                  Get in touch with the university for more information
-                </CardDescription>
+                <CardTitle>Additional Information</CardTitle>
               </CardHeader>
-              <CardContent>
-                <Dialog open={showContactDialog} onOpenChange={setShowContactDialog}>
-                  <DialogTrigger asChild>
-                    <Button className="w-full">Contact University</Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Contact {university.name}</DialogTitle>
-                      <DialogDescription>
-                        Fill out the form below to get in touch with the university
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="space-y-4">
-                      <div>
-                        <Label htmlFor="name">Name</Label>
-                        <Input
-                          id="name"
-                          value={contactData.name}
-                          onChange={(e) => setContactData({ ...contactData, name: e.target.value })}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          value={contactData.email}
-                          onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="phone">Phone</Label>
-                        <Input
-                          id="phone"
-                          type="tel"
-                          value={contactData.phone}
-                          onChange={(e) => setContactData({ ...contactData, phone: e.target.value })}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="message">Message</Label>
-                        <Textarea
-                          id="message"
-                          value={contactData.message}
-                          onChange={(e) => setContactData({ ...contactData, message: e.target.value })}
-                        />
-                      </div>
-                      <Button className="w-full">Send Message</Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+              <CardContent className="space-y-4">
+                <div>
+                  <h4 className="font-medium mb-2">Founded</h4>
+                  <p className="text-gray-600">{university.founded}</p>
+                </div>
+                <div>
+                  <h4 className="font-medium mb-2">Campus Size</h4>
+                  <p className="text-gray-600">{university.campusSize}</p>
+                </div>
+                <div>
+                  <h4 className="font-medium mb-2">Faculty-Student Ratio</h4>
+                  <p className="text-gray-600">{university.facultyStudentRatio}</p>
+                </div>
+                <div>
+                  <h4 className="font-medium mb-2">International Students</h4>
+                  <p className="text-gray-600">{university.internationalStudents}</p>
+                </div>
+                <div>
+                  <h4 className="font-medium mb-2">Admission Requirements</h4>
+                  <ul className="list-disc list-inside text-gray-600">
+                    {university.admissionRequirements.map((req, index) => (
+                      <li key={index}>{req}</li>
+                    ))}
+                  </ul>
+                </div>
+                <Button
+                  className="w-full"
+                  onClick={() => setShowContactDialog(true)}
+                >
+                  Contact University
+                </Button>
               </CardContent>
             </Card>
           </div>

@@ -2,26 +2,19 @@
 
 import { useState, useEffect, MouseEventHandler } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
 import {
   Search,
   Filter,
   Star,
   MapPin,
   BookOpen,
-  Users,
-  TrendingUp,
-  Calendar,
   Loader2,
   AlertCircle,
-  ChevronLeft,
-  ChevronRight,
   BookmarkCheck,
   BookmarkPlus,
-  ChevronDown,
 } from "lucide-react"
 import Link from "next/link"
 import { universitiesApi } from "@/lib/api"
@@ -322,26 +315,25 @@ export default function UniversitiesPage() {
         {/* Universities Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-8">
           {filteredUniversities.map((university) => {
-            // Fallbacks for mock data fields
+            // Use fields directly from the University interface
             const name = university.name;
             const location = university.location;
             const type = university.type;
-            const ranking = (university as any).ranking || university.ranking || "-";
-            const students = (university as any).students || university.studentCount?.toString() || "Varies";
-            const tuition = (university as any).tuition || university.tuitionFee || "Varies";
-            const acceptance = (university as any).acceptance || "-";
-            const programs = university.programs || [];
+            const ranking = university.ranking;
+            const students = university.students;
+            const tuition = university.tuition;
+            const acceptance = university.acceptance;
+            const programs = university.programs;
             const rating = university.rating;
-            const image = university.imageUrl || (university as any).image || "/universities/placeholder.svg";
+            const image = university.image;
             const website = university.website;
-            const reviewCount = (university as any).reviewCount || 245; // fallback for demo
             
             return (
               <Card key={university.id} className="flex flex-col md:flex-row items-stretch min-h-[320px] border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
                 {/* Image Section */}
                 <div className="flex-shrink-0 flex items-center justify-center bg-gray-50 md:w-56 w-full h-48 md:h-auto relative">
                   <img
-                    src={image as string}
+                    src={image}
                     alt={name}
                     className="object-cover w-full h-full rounded-l-lg md:rounded-l-lg md:rounded-r-none rounded-t-lg md:rounded-t-none"
                     onError={(e) => {
@@ -386,7 +378,7 @@ export default function UniversitiesPage() {
                       <Badge variant="secondary" className="ml-2 px-2 py-0.5 text-xs whitespace-nowrap">{type}</Badge>
                     </div>
                     <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-700 mb-2 min-w-0">
-                      <span className="truncate">Ranking: <a href="#" className="text-blue-600 hover:underline font-medium">{ranking}</a></span>
+                      <span className="truncate">Ranking: <span className="font-medium">{ranking}</span></span>
                       <span className="truncate">Students: <span className="font-medium">{students}</span></span>
                       <span className="truncate">Tuition: <span className="font-medium">{tuition}</span></span>
                       <span className="truncate">Acceptance: <span className="font-medium">{acceptance}</span></span>
@@ -408,7 +400,6 @@ export default function UniversitiesPage() {
                     <div className="flex items-center gap-1 text-yellow-500 text-base font-semibold mb-2">
                       <Star className="h-5 w-5 fill-yellow-400 text-yellow-400 mr-1" />
                       <span className="text-lg font-bold text-gray-900">{rating}</span>
-                      <span className="text-gray-500 text-sm ml-1">({reviewCount} reviews)</span>
                     </div>
                     <div className="flex gap-2">
                       {website && (

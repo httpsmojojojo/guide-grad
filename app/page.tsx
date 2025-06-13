@@ -226,6 +226,26 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Feedback Section */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="container mx-auto">
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-white p-8 rounded-lg shadow-sm">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Share Your Feedback</h2>
+              <p className="text-gray-600 mb-6">
+                Help us improve Guide Grad by sharing your suggestions and feedback about our platform.
+              </p>
+              <Link href="/feedback">
+                <Button className="w-full bg-primary hover:bg-primary-dark text-white">
+                  Submit Feedback
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12 px-4">
         <div className="container mx-auto">

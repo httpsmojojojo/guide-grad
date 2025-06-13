@@ -26,6 +26,7 @@ export default function SignUpPage() {
     currentEducation: "",
     interestedField: "",
     agreeTerms: false,
+    reference: "",
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -79,7 +80,8 @@ export default function SignUpPage() {
         currentEducation: formData.currentEducation,
         interestedField: formData.interestedField,
         extracurricularActivities: "",
-        personalStatement: ""
+        personalStatement: "",
+        ...(formData.reference ? { reference: formData.reference } : {})
       })
 
       setSubmitStatus("success")
@@ -264,6 +266,17 @@ export default function SignUpPage() {
                   className={errors.confirmPassword ? "border-red-500" : ""}
                 />
                 {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
+              </div>
+
+              <div>
+                <Label htmlFor="reference">Reference (optional)</Label>
+                <Input
+                  id="reference"
+                  type="text"
+                  placeholder="Who referred you? (optional)"
+                  value={formData.reference}
+                  onChange={(e) => setFormData({ ...formData, reference: e.target.value })}
+                />
               </div>
 
               <div className="flex items-center space-x-2">

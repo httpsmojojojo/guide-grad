@@ -3,7 +3,6 @@ import {
   doc, 
   getDocs, 
   getDoc, 
-  setDoc, 
   deleteDoc,
   query,
   where,
@@ -19,20 +18,34 @@ import { authApi } from './auth'
 
 export interface University {
   id?: string
-  name: string
-  location: string
+  acceptance: string
+  address: string
+  admissionRequirements: string[]
+  campusSize: string
   description: string
-  programs: string[]
-  rating: number
-  imageUrl: string
-  website: string
-  admissionDeadline: string
-  tuitionFee: string
-  requirements: string[]
+  email: string
   facilities: string[]
-  type: 'Public' | 'Private'
-  ranking: number
-  studentCount: number
+  facultyStudentRatio: string
+  founded: string
+  image: string
+  internationalStudents: string
+  location: string
+  name: string
+  phone: string
+  programs: string[]
+  programs_detailed: Array<{
+    name: string
+    description: string
+    duration: string
+    degree: string
+  }>
+  ranking: string
+  rating: number
+  scholarships: string[]
+  students: string
+  tuition: string
+  type: string
+  website: string
 }
 
 export interface UniversityFilters {
@@ -87,7 +100,7 @@ export const universitiesApi = {
           id: doc.id,  // Use Firestore document ID
           ...data,
           programs: data.programs || [],
-          requirements: data.requirements || [],
+          admissionRequirements: data.admissionRequirements || [],
           facilities: data.facilities || []
         } as University)
       })
@@ -118,7 +131,7 @@ export const universitiesApi = {
           id: docSnap.id,  // Use Firestore document ID
           ...data,
           programs: data.programs || [],
-          requirements: data.requirements || [],
+          admissionRequirements: data.admissionRequirements || [],
           facilities: data.facilities || []
         } as University
       }
