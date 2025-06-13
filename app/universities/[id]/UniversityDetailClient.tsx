@@ -149,7 +149,7 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         {/* Hero Image Section */}
-        <div className="relative w-full h-[400px] mb-8 rounded-lg overflow-hidden">
+        <div className="relative w-full h-[685px] mb-8 rounded-lg overflow-hidden">
           <img
             src={university.imageDetail || university.image}
             alt={university.name}
