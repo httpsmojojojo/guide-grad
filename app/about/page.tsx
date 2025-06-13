@@ -95,8 +95,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/sahil-lohana.png",
       bio: "Sahil Lohana, the pioneering founder of GuideGrad, is committed to equipping students with personalized career guidance. His goal is to bridge the gap between aspirations and accomplishments, helping young people confidently determine their futures.",
-      specialties: ["International Admissions", "PhD Guidance", "Research Opportunities"],
-      contact: "sahil@guidegrad.pk",
+      specialties: ["Student-Centric Innovation", "Vision-Driven Leadership", "Education Access Advocacy"],
     },
     {
       name: "Ahsan Aslam",
@@ -104,17 +103,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/ahsan-aslam.png",
       bio: "Ahsan Aslam, Co-founder of GuideGrad, plays a significant role in shaping our strategic path and community involvement. He is dedicated to creating a supportive environment where every student gets the personalized guidance required to achieve their professional aspirations.",
-      specialties: ["Career Counseling", "University Selection", "Application Strategy"],
-      contact: "ahsan@guidegrad.pk",
-    },
-    {
-      name: "Muhammad Moiz",
-      role: "Co-Founder & CTO",
-      education: "BS Computer Science, MUET Jamshoro",
-      image: "/team/muhammad-moiz.png",
-      bio: "Mohammad Moiz, Co-founder and CTO of GuideGrad, is the technological mastermind behind our mission to personalize career counseling. He guarantees the platform delivers innovative and smooth experiences, enabling students to explore their futures confidently.",
-      specialties: ["University Partnerships", "Admission Requirements", "Scholarship Opportunities"],
-      contact: "moiz@guidegrad.pk",
+      specialties: ["Experience-Centered Design", "Strategic Visual Communication", "Inclusive Brand Identity"],
     },
     {
       name: "Pireh Memon",
@@ -122,8 +111,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/pireh-memon.png",
       bio: "Pireh Memon, GuideGrad's Content Writer, simplifies career choices for better understanding. She writes straight-forward, informative articles and guides, providing students with the information required to pick the best path for their future.",
-      specialties: ["EdTech Solutions", "Platform Development", "Data Analytics"],
-      contact: "pireh@guidegrad.pk",
+      specialties: ["Career Guidance Writing", "Educational Simplification", "Student-Focused Content"],
     },
     {
       name: "Ubaid Raza",
@@ -131,8 +119,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/ubaid-raza.png",
       bio: "Ubaid Raza, an essential part of our Student Guidance & Ambassador Support team, is determined to directly helping students with their career choices. He actively promotes our ambassador network, ensuring thorough outreach and support for every student looking for mentorship.",
-      specialties: ["Student Guidance", "Ambassador Support"],
-      contact: "ubaid@guidegrad.pk",
+      specialties: ["Direct Student Support", "Ambassador Mobilization", "Personalized Career Pathways"],
     },
     {
       name: "Salwa Qureshi",
@@ -140,8 +127,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/salwa-qureshi.png",
       bio: "Salwa Qureshi, our lead for Student Guidance & Ambassador Support, is leading the efforts to empower students through tailored guidance. She expertly nurtures our ambassador community, ensuring each student receives personalized assistance and support throughout their career patht.",
-      specialties: ["Student Guidance", "Ambassador Support"],
-      contact: "salwa@guidegrad.pk",
+      specialties: ["Personalized Mentorship", "Student Empowerment", "Ambassador Engagement"],
     },
     {
       name: "Aqsa Anwar",
@@ -149,8 +135,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/aqsa-anwar.png",
       bio: "Aqsa brings creativity to life as a graphics designer, producing visually compelling designs for various platforms. Her artistic vision ensures that all visuals align with the organization’s brand.",
-      specialties: ["Graphic Design"],
-      contact: "aqsa@guidegrad.pk",
+      specialties: ["Educational Visuals", "Student-Focused Branding", "Creative Storytelling"],
     },
     {
       name: "Bhawesh Kumar",
@@ -158,8 +143,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/bhawesh-kumar.png",
       bio: "Bhavesh is a talented web developer known for creating efficient and dynamic websites. His expertise in coding and development ensures the creation of responsive and functional online platforms.",
-      specialties: ["Web Development"],
-      contact: "bhawesh@guidegrad.pk",
+      specialties: ["Career Platform Development", "Scalable Web Solutions", "Performance-Driven Coding"],
     },
     {
       name: "Aqsa Siddique",
@@ -167,8 +151,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/aqsa-siddique.png",
       bio: "Aqsa Siddique, GuideGrad's talented Web Developer, designs our user-friendly online platform. She creates and maintains the digital space where students access essential resources and engage with mentors, ensuring a smooth and efficient experience.",
-      specialties: ["Web Development"],
-      contact: "aqsa@guidegrad.pk",
+      specialties: ["Student-Friendly Interfaces", "Platform Usability", "Web-Based Learning Tools"],
     },
     {
       name: "Ramsha Rameez",
@@ -176,8 +159,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/ramsha-rameez.png",
       bio: "Ramsha is a skilled web developer, dedicated to crafting functional and visually engaging websites. Her technical expertise ensures smooth user experiences and well-executed digital solutions.",
-      specialties: ["Web Development"],
-      contact: "ramsha@guidegrad.pk",
+      specialties: ["Career Resource Integration", "User-Centric Design", "Frontend Functionality"],
     },
     {
       name: "Sahil Hussain",
@@ -185,8 +167,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/sahil-hussain.png",
       bio: "Sahil Hussain, our Social Media Management lead, makes sure GuideGrad's message is delivered to students everywhere. He utilizes social media to connect with young individuals and share valuable career advice in an appealing manner.",
-      specialties: ["Social Media Management"],
-      contact: "sahil@guidegrad.pk",
+      specialties: ["Digital Student Engagement", "Social Awareness Campaigns", "Educational Content Promotion"],
     },
     {
       name: "Sandia",
@@ -194,8 +175,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/sandia.png",
       bio: "Sandia is a talented content creator who crafts engaging digital content for diverse audiences. Her creative approach helps bring fresh perspectives to every project she works on.",
-      specialties: ["Content Creation"],
-      contact: "sandia@guidegrad.pk",
+      specialties: ["Engaging Educational Media", "Creative Communication", "Student Interaction Design"],
     },
     {
       name: "Muhammad Hasnain",
@@ -203,8 +183,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/muhammad-hasnain.png",
       bio: "Muhammad Hasnain, an integral Operations & Team Co-ordinator at GuideGrad, plays a crucial role in our smooth internal workings and partnership mindset. He dedicates himself to guaranteeing our team operates smoothly, enabling us to consistently deliver exceptional career mentorship to students",
-      specialties: ["Operations", "Team Coordination"],
-      contact: "hasnain@guidegrad.pk",
+      specialties: ["Internal Process Structuring", "Strategic Collaboration", "Student-Focused Coordination"],
     },
     {
       name: "Samad Memon",
@@ -212,8 +191,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/samad-memon.png",
       bio: "Samad Memon, GuideGrad's Operations & Team Co-ordinator, is the organizational backbone that ensures uninterrupted execution of our mentorship initiatives. He skillfully manages our internal efforts, empowering our team to provide exceptional, personalized guidance to each student.",
-      specialties: ["Operations", "Team Coordination"],
-      contact: "samad@guidegrad.pk",
+      specialties: ["Workflow Optimization", "Team Enablement", "Program Efficiency"],
     },
     {
       name: "Muhammad Azeem",
@@ -221,17 +199,15 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/muhammad-azeem.png",
       bio: "Muhammad Azeem, an Operations & Team Co-ordinator at GuideGrad, is crucial in improving our operational flow and nurturing teamwork. He guarantees that every aspect of our operations functions efficiently, allowing us to consistently fulfill our commitment to personlized student mentorship.",
-      specialties: ["Operations", "Team Coordination"],
-      contact: "azeem@guidegrad.pk",
+      specialties: ["Team Alignment", "Program Execution", "Operational Scalability"],
     },
     {
       name: "Faraz Hussain",
       role: "Public Relations",
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/faraz-hussain.png",
-      bio: "Faraz is an operations and team coordinator who excels at managing teams and ensuring the timely completion of projects. His organizational skills and strategic mindset help optimize team performance.",
-      specialties: ["Public Relations"],
-      contact: "faraz@guidegrad.pk",
+      bio: "Faraz is dedicated to enhancing the organization’s presence through powerful public relations campaigns. Her expertise in media and communications helps maintain a strong, consistent brand image.",
+      specialties: ["Public Relations Strategy", "Media Relations Management", "Brand Awareness Enhancement"],
     },
     {
       name: "Muqaddas Riaz",
@@ -239,8 +215,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/muqaddas-riaz.png",
       bio: "Muqaddas is focused on promoting the organization through impactful public relations campaigns. Her skill in managing communicationq and media ensures a strong and consistent public image.",
-      specialties: ["Public Relations"],
-      contact: "muqaddas@guidegrad.pk",
+      specialties: ["Public Messageing Strategy", "Media Engagement", "Communication Outreach"],
     },
     {
       name: "Anees Hussain",
@@ -248,8 +223,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/anees-hussain.png",
       bio: "Anees specializes in building strategic partnerships and maintaining positive media relations. His expertise helps the organization connect effectively with its audience and stakeholders.",
-      specialties: ["Public Relations"],
-      contact: "anees@guidegrad.pk",
+      specialties: ["Institutional Partnerships", "Educational Campaigns", "Relationship Management"],
     },
     {
       name: "Ghulam Fatima",
@@ -257,8 +231,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/ghulam-fatima.png",
       bio: "As a public relations expert, Ghulam Fatima manages the organization's reputation and builds strong relationships with the media. Her efforts help to maintain a positive public image and strategic communications.",
-      specialties: ["Public Relations"],
-      contact: "fatima@guidegrad.pk",
+      specialties: ["Educational PR Strategy", "Institutional Communication", "Brand Credibility Building"],
     },
     {
       name: "Iqra Shoaib",
@@ -266,8 +239,7 @@ export default function AboutPage() {
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/iqra-shoaib.png",
       bio: "Iqra is a proactive public relations professional who manages media relationships and strengthens brand presence. Her communication skills play a crucial role in enhancing the organization's reputation.",
-      specialties: ["Public Relations"],
-      contact: "iqra@guidegrad.pk",
+      specialties: ["Youth-Centric Messaging", "Media Coordination", "Advocacy Communication"],
     },
   ]
 
@@ -307,7 +279,7 @@ export default function AboutPage() {
     },
     {
       name: "Zara Khan",
-      role: "MBA Student at IBA Karachi",
+      role: "Computer Science Student at IBA Karachi",
       image: "/placeholder.svg?height=100&width=100",
       content:
         "From application strategy to interview preparation, Guide Grad was with me every step of the way. Highly recommended!",
@@ -316,11 +288,11 @@ export default function AboutPage() {
     },
     {
       name: "Omar Sheikh",
-      role: "PhD Student at MIT",
+      role: "Mechanical Engineering Student at MUET Jamshoro",
       image: "/placeholder.svg?height=100&width=100",
       content:
-        "Guide Grad's international guidance program helped me secure admission to MIT with full funding. Their expertise is unmatched.",
-      rating: 5,
+        "Guide Grad's guidance program helped me secure admission to MUET Jamshoro. Their expertise is unmatched.",
+      rating: 4,
       year: "Class of 2023",
     },
   ]
