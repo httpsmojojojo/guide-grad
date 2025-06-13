@@ -27,7 +27,9 @@ export interface University {
   facilities: string[]
   facultyStudentRatio: string
   founded: string
-  image: string
+  image: string  // Legacy field, will be deprecated
+  imageCard: string  // New field for card view (400x300px)
+  imageDetail: string  // New field for detail view (1200x800px)
   internationalStudents: string
   location: string
   name: string

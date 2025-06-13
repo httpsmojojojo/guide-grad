@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { BookOpen, Users, Award, Phone, ArrowRight, Star, CheckCircle } from "lucide-react"
 import Link from "next/link"
-import { Logo } from "@/components/Logo"
+import { FooterLogo } from "@/components/FooterLogo"
 
 export default function LandingPage() {
   return (
@@ -251,7 +251,7 @@ export default function LandingPage() {
         <div className="container mx-auto">
           <div className="grid md:grid-cols-4 gap-8">
             <div className="mb-4">
-              <Logo />
+              <FooterLogo />
               <p className="text-gray-400">Empowering Pakistani students to achieve their higher education dreams.</p>
             </div>
             <div>

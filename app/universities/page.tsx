@@ -21,13 +21,6 @@ import { universitiesApi } from "@/lib/api"
 import type { University } from "@/lib/api/universities"
 import { authApi } from '@/lib/api/auth'
 
-interface FilterState {
-  location: string
-  program: string
-  rating: number | null
-  type: string
-}
-
 export default function UniversitiesPage() {
   const [universities, setUniversities] = useState<University[]>([])
   const [savedUniversities, setSavedUniversities] = useState<string[]>([])
@@ -35,19 +28,10 @@ export default function UniversitiesPage() {
   const [error, setError] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [filters, setFilters] = useState<FilterState>({
-    location: "",
-    program: "",
-    rating: null,
-    type: "",
-  })
-  const [showFilters, setShowFilters] = useState(false)
   const [isSaving, setIsSaving] = useState<string | null>(null)
   const [lastDoc, setLastDoc] = useState<any>(null)
   const [hasMore, setHasMore] = useState(true)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
-  const [locations, setLocations] = useState<string[]>([])
-  const [programs, setPrograms] = useState<string[]>([])
 
   useEffect(() => {
     const initializeData = async () => {
@@ -67,15 +51,6 @@ export default function UniversitiesPage() {
     initializeData()
   }, [])
 
-  useEffect(() => {
-    // Extract unique locations and programs from universities
-    const uniqueLocations = Array.from(new Set(universities.map(uni => uni.location)))
-    const uniquePrograms = Array.from(new Set(universities.flatMap(uni => uni.programs)))
-    
-    setLocations(uniqueLocations)
-    setPrograms(uniquePrograms)
-  }, [universities])
-
   const loadUniversities = async (loadMore = false) => {
     if (loadMore) {
       setIsLoadingMore(true)
@@ -85,21 +60,10 @@ export default function UniversitiesPage() {
     setError("")
 
     try {
-      const apiFilters = {
-        location: filters.location || undefined,
-        program: filters.program || undefined,
-        minRating: filters.rating || undefined,
-        type: filters.type || undefined,
-      }
-
-      const { universities: newUniversities, lastDoc: newLastDoc } = await universitiesApi.getUniversities(
-        apiFilters,
-        loadMore ? lastDoc : undefined
-      )
-
+      const { universities: newUniversities, lastDoc: newLastDoc } = await universitiesApi.getUniversities({}, loadMore ? lastDoc : undefined)
       setUniversities(prev => loadMore ? [...prev, ...newUniversities] : newUniversities)
       setLastDoc(newLastDoc)
-      setHasMore(newUniversities.length === 10) // Assuming page size is 10
+      setHasMore(newUniversities.length === 10)
     } catch (error: any) {
       console.error('Error loading universities:', error)
       setError(error.message || 'Failed to load universities')
@@ -148,32 +112,12 @@ export default function UniversitiesPage() {
     }
   }
 
-  const handleFilterChange = (newFilters: FilterState) => {
-    setFilters(newFilters)
-    setLastDoc(null)
-    loadUniversities()
-  }
-
-  const handleLoadMore: MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault()
-    loadUniversities(true)
-  }
-
-  const applyFilters = () => {
-    return universities.filter(university => {
-      const matchesSearch = university.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        university.programs.some(program => program.toLowerCase().includes(searchQuery.toLowerCase()))
-
-      const matchesLocation = !filters.location || university.location.toLowerCase() === filters.location.toLowerCase()
-      const matchesProgram = !filters.program || university.programs.some(program => program.toLowerCase() === filters.program.toLowerCase())
-      const matchesRating = !filters.rating || university.rating >= filters.rating
-      const matchesType = !filters.type || university.type.toLowerCase() === filters.type.toLowerCase()
-
-      return matchesSearch && matchesLocation && matchesProgram && matchesRating && matchesType
-    })
-  }
-
-  const filteredUniversities = applyFilters()
+  const filteredUniversities = universities.filter(university => {
+    return (
+      university.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      university.programs.some(program => program.toLowerCase().includes(searchQuery.toLowerCase()))
+    )
+  })
 
   if (isLoading) {
     return (
@@ -218,7 +162,7 @@ export default function UniversitiesPage() {
           </p>
         </div>
 
-        {/* Search and Filter Bar */}
+        {/* Search Bar Only (no filter button) */}
         <div className="mb-8">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
@@ -233,76 +177,7 @@ export default function UniversitiesPage() {
                 />
               </div>
             </div>
-            <Button
-              variant="outline"
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2"
-            >
-              <Filter className="w-4 h-4" />
-              Filters
-            </Button>
           </div>
-
-          {/* Filter Panel */}
-          {showFilters && (
-            <Card className="mt-4">
-              <CardContent className="p-4">
-                <div className="grid md:grid-cols-4 gap-4">
-                  <div>
-                    <label className="text-sm font-medium">Location</label>
-                    <select
-                      className="w-full mt-1 rounded-md border border-gray-300 p-2"
-                      value={filters.location}
-                      onChange={(e) => handleFilterChange({ ...filters, location: e.target.value })}
-                    >
-                      <option value="">All Locations</option>
-                      {locations.map(location => (
-                        <option key={location} value={location}>{location}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium">Program</label>
-                    <select
-                      className="w-full mt-1 rounded-md border border-gray-300 p-2"
-                      value={filters.program}
-                      onChange={(e) => handleFilterChange({ ...filters, program: e.target.value })}
-                    >
-                      <option value="">All Programs</option>
-                      {programs.map(program => (
-                        <option key={program} value={program}>{program}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium">Rating</label>
-                    <select
-                      className="w-full mt-1 rounded-md border border-gray-300 p-2"
-                      value={filters.rating || ""}
-                      onChange={(e) => handleFilterChange({ ...filters, rating: e.target.value ? Number(e.target.value) : null })}
-                    >
-                      <option value="">All Ratings</option>
-                      <option value="4">4+ Stars</option>
-                      <option value="3">3+ Stars</option>
-                      <option value="2">2+ Stars</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium">Type</label>
-                    <select
-                      className="w-full mt-1 rounded-md border border-gray-300 p-2"
-                      value={filters.type}
-                      onChange={(e) => handleFilterChange({ ...filters, type: e.target.value })}
-                    >
-                      <option value="">All Types</option>
-                      <option value="Public">Public</option>
-                      <option value="Private">Private</option>
-                    </select>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
         </div>
 
         {/* Results Count */}
@@ -325,7 +200,7 @@ export default function UniversitiesPage() {
             const acceptance = university.acceptance;
             const programs = university.programs;
             const rating = university.rating;
-            const image = university.image;
+            const image = university.imageCard || university.image;
             const website = university.website;
             
             return (
@@ -429,12 +304,6 @@ export default function UniversitiesPage() {
                 variant="outline"
                 onClick={() => {
                   setSearchQuery("")
-                  setFilters({
-                    location: "",
-                    program: "",
-                    rating: null,
-                    type: "",
-                  })
                 }}
               >
                 Clear Filters
@@ -448,7 +317,7 @@ export default function UniversitiesPage() {
           <div className="flex justify-center mt-8">
             <Button
               variant="outline"
-              onClick={handleLoadMore}
+              onClick={() => loadUniversities(true)}
               disabled={isLoadingMore}
             >
               {isLoadingMore ? (

@@ -148,47 +148,34 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        {/* Hero Section */}
-        <div className="relative">
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-            <div className="relative h-64 md:h-80">
-              <Image src={university.image || "/placeholder.svg"} alt={university.name} fill className="object-cover" />
-              {/* Floating Save Button */}
-              <Button
-                variant="outline"
-                size="sm"
-                className="absolute top-4 right-4 bg-white/90 hover:bg-white"
-                onClick={handleSaveToggle}
-                disabled={isSaving}
-              >
-                {isSaving ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                ) : isSaved ? (
-                  <BookmarkCheck className="w-4 h-4 mr-2" />
-                ) : (
-                  <BookmarkPlus className="w-4 h-4 mr-2" />
-                )}
-                {isSaved ? "Saved" : "Save"}
-              </Button>
-            </div>
-            <div className="p-6">
-              <div className="flex items-center space-x-2 mb-2">
-                <Badge variant="secondary" className="bg-white text-gray-900">
-                  {university.location}
-                </Badge>
-                <Badge variant="secondary" className="bg-blue-600 text-white">
-                  {university.rating} Rating
-                </Badge>
-              </div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">{university.name}</h1>
-              <div className="flex items-center space-x-4 text-sm">
+        {/* Hero Image Section */}
+        <div className="relative w-full h-[400px] mb-8 rounded-lg overflow-hidden">
+          <img
+            src={university.imageDetail || university.image}
+            alt={university.name}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              const parent = e.currentTarget.parentElement;
+              if (parent && !parent.querySelector('.image-placeholder')) {
+                const icon = document.createElement('div');
+                icon.className = 'image-placeholder absolute inset-0 flex flex-col items-center justify-center text-gray-300 bg-gray-100';
+                icon.innerHTML = `<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"mx-auto\" width=\"64\" height=\"64\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><rect width=\"18\" height=\"14\" x=\"3\" y=\"5\" rx=\"2\" stroke-width=\"1.5\"/><circle cx=\"8.5\" cy=\"10.5\" r=\"1.5\" stroke-width=\"1.5\"/><path stroke-width=\"1.5\" d=\"M21 19l-5.5-6.5-4.5 5.5-2-2.5L3 19\"/></svg>`;
+                parent.appendChild(icon);
+              }
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+            <div className="p-6 text-white">
+              <h1 className="text-4xl font-bold mb-2">{university.name}</h1>
+              <div className="flex items-center gap-4">
                 <div className="flex items-center">
-                  <MapPin className="w-4 h-4 mr-1" />
-                  {university.location}
+                  <MapPin className="w-5 h-5 mr-1" />
+                  <span>{university.location}</span>
                 </div>
                 <div className="flex items-center">
-                  <Star className="w-4 h-4 mr-1 fill-yellow-400 text-yellow-400" />
-                  {university.rating} Rating
+                  <Star className="w-5 h-5 mr-1 fill-yellow-400 text-yellow-400" />
+                  <span>{university.rating}</span>
                 </div>
               </div>
             </div>

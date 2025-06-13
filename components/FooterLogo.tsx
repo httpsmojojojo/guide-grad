@@ -5,22 +5,22 @@ interface LogoProps {
   showText?: boolean
 }
 
-export function Logo({ showText = true }: LogoProps) {
+export function FooterLogo({ showText = true }: LogoProps) {
   return (
     <Link href="/" className="flex items-center space-x-2">
       <div className="w-16 h-16 rounded-lg flex items-center justify-center">
         <Image
-          src="/logo.png"
+          src="/footer-logo.png"
           alt="Guide Grad Logo"
-          width={64}
-          height={64}
-          className="w-14 h-14"
+          width={128}
+          height={128}
+          className="w-128 h-128"
         />
       </div>
       {showText && (
         <div className="flex flex-col items-center">
           <span className="text-2xl font-bold text-primary">Guide Grad</span>
-          <span className="text-sm font-bold text-black">Access | Learn | Excel</span>
+          <span className="text-sm font-bold text-white">Access | Learn | Excel</span>
         </div>
       )}
     </Link>
