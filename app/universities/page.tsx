@@ -206,11 +206,11 @@ export default function UniversitiesPage() {
             return (
               <Card key={university.id} className="flex flex-col md:flex-row items-stretch min-h-[320px] border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
                 {/* Image Section */}
-                <div className="flex-shrink-0 flex items-center justify-center bg-gray-50 md:w-56 w-full h-48 md:h-auto relative">
+                <div className="flex-shrink-0 flex items-center justify-center bg-gray-50 md:w-48 w-full h-48 md:h-auto relative p-4">
                   <img
                     src={image}
                     alt={name}
-                    className="object-cover w-full h-full rounded-l-lg md:rounded-l-lg md:rounded-r-none rounded-t-lg md:rounded-t-none"
+                    className="w-36 h-36 object-contain rounded-lg"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
                       const parent = e.currentTarget.parentElement;
