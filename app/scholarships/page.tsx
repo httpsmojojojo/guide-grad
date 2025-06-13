@@ -4,37 +4,21 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Progress } from "@/components/ui/progress"
 import {
-  BookOpen,
-  Search,
-  ArrowLeft,
-  Calendar,
   DollarSign,
   Users,
   Award,
   Clock,
-  Star,
   TrendingUp,
-  X,
-  SlidersHorizontal,
-  Send,
   Eye,
-  CheckCircle,
+  Building,
+  GraduationCap,
 } from "lucide-react"
-import Link from "next/link"
 import { scholarshipsApi, type Scholarship } from "@/lib/api"
 import { toast } from "sonner"
-import { Logo } from "@/components/Logo"
 
 export default function ScholarshipsPage() {
   const [scholarships, setScholarships] = useState<Scholarship[]>([])
@@ -167,66 +151,54 @@ export default function ScholarshipsPage() {
               const daysLeft = getDaysUntilDeadline(scholarship.deadline)
 
               return (
-                <Card key={scholarship.id} className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex-1">
-                            <div className="flex items-center space-x-2 mb-2">
-                              <Badge variant="secondary" className={`${deadlineStatus.bg} ${deadlineStatus.color}`}>
-                                {daysLeft > 0 ? `${daysLeft} days left` : "Expired"}
-                              </Badge>
-                              {/* No status field in Firestore Scholarship type; badge omitted */}
-                            </div>
-                            <h3
-                              className="font-semibold text-lg text-gray-900 hover:text-primary cursor-pointer"
-                              onClick={() => openDetailsDialog(scholarship)}
-                            >
-                              {scholarship.title}
-                            </h3>
-                            <p className="text-primary font-medium">{scholarship.university}</p>
-                          </div>
-                        </div>
-
-                        <p className="text-sm text-gray-600 mb-4">{scholarship.description}</p>
-
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-4">
-                          <div>
-                            <span className="text-gray-600">Amount:</span>
-                            <span className="font-medium ml-1 text-primary">{scholarship.amount}</span>
-                          </div>
-                          <div>
-                            <span className="text-gray-600">Type:</span>
-                            <span className="font-medium ml-1">{scholarship.type}</span>
-                          </div>
-                          <div className="flex items-center">
-                            <Clock className="w-4 h-4 text-primary mr-1" />
-                            <span className="text-primary font-medium">{scholarship.deadline}</span>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between pt-2">
-                          <div className="text-xs text-gray-500">
-                            {/* No level, fields, applicants, or awards fields in Firestore Scholarship type; section omitted */}
-                          </div>
-                          <div className="flex space-x-2">
-                            <Button variant="outline" size="sm" onClick={() => openDetailsDialog(scholarship)}>
-                              <Eye className="w-4 h-4 mr-1" />
-                              Details
-                            </Button>
-                            <Button
-                              size="sm"
-                              className="bg-primary hover:bg-primary-dark"
-                              onClick={() => window.open(scholarship.applicationUrl, '_blank')}
-                            >
-                              Visit Website
-                            </Button>
-                          </div>
+                <Card key={scholarship.id} className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
+                  {/* Info Section */}
+                  <div className="p-6">
+                    <div className="flex flex-col gap-2 min-w-0">
+                      <div className="flex items-center gap-2 mb-1 min-w-0">
+                        <h2 className="text-lg md:text-xl font-bold leading-tight flex-1 break-words min-w-0">{scholarship.title}</h2>
+                      </div>
+                      <div className="flex items-center gap-2 mb-2 min-w-0">
+                        <Building className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                        <span className="text-sm text-gray-700 truncate">{scholarship.provider}</span>
+                        <Badge variant="secondary" className={`ml-2 px-2 py-0.5 text-xs whitespace-nowrap ${deadlineStatus.bg} ${deadlineStatus.color}`}>
+                          {daysLeft > 0 ? `${daysLeft} days left` : "Expired"}
+                        </Badge>
+                      </div>
+                      <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-700 mb-2 min-w-0">
+                        <span className="truncate">Amount: <span className="font-medium text-primary">{scholarship.amount}</span></span>
+                        <span className="truncate">Type: <span className="font-medium">{scholarship.type}</span></span>
+                        <span className="truncate">Level: <span className="font-medium">{scholarship.level}</span></span>
+                      </div>
+                      <p className="text-sm text-gray-600 line-clamp-2">{scholarship.description}</p>
+                      <div className="mt-2">
+                        <span className="text-sm text-gray-700 font-medium">Fields:</span>
+                        <div className="flex flex-wrap gap-2 mt-1">
+                          {scholarship.fields?.slice(0, 3).map((field, idx) => (
+                            <Badge key={idx} variant="secondary" className="px-3 py-0.5 text-xs font-semibold whitespace-nowrap">{field}</Badge>
+                          ))}
+                          {scholarship.fields && scholarship.fields.length > 3 && (
+                            <Badge variant="secondary" className="px-3 py-0.5 text-xs font-semibold whitespace-nowrap">+{scholarship.fields.length - 3} more</Badge>
+                          )}
                         </div>
                       </div>
                     </div>
-                  </CardContent>
+
+                    {/* Buttons at the bottom */}
+                    <div className="flex gap-2 mt-4 pt-4 border-t">
+                      <Button variant="outline" size="sm" onClick={() => openDetailsDialog(scholarship)}>
+                        <Eye className="w-4 h-4 mr-1" />
+                        View Details
+                      </Button>
+                      <Button
+                        size="sm"
+                        className="bg-primary hover:bg-primary-dark"
+                        onClick={() => window.open(scholarship.applicationUrl, '_blank')}
+                      >
+                        Website
+                      </Button>
+                    </div>
+                  </div>
                 </Card>
               )
             })}
@@ -238,32 +210,117 @@ export default function ScholarshipsPage() {
       <Dialog open={showDetailsDialog} onOpenChange={setShowDetailsDialog}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{selectedScholarship?.title}</DialogTitle>
-            <DialogDescription>{selectedScholarship?.university}</DialogDescription>
+            <DialogTitle className="text-2xl font-bold">{selectedScholarship?.title}</DialogTitle>
+            <DialogDescription className="text-lg">{selectedScholarship?.provider}</DialogDescription>
           </DialogHeader>
           {selectedScholarship && (
-            <div className="space-y-4">
-              <div className="flex flex-col md:flex-row gap-6">
-                <div className="flex-1">
-                  <p className="text-gray-700 mb-2">{selectedScholarship.description}</p>
-                  <div className="mb-2">
-                    <span className="font-medium">Amount:</span> {selectedScholarship.amount}
-                  </div>
-                  <div className="mb-2">
-                    <span className="font-medium">Deadline:</span> {selectedScholarship.deadline}
-                  </div>
-                  <div className="mb-2">
-                    <span className="font-medium">Type:</span> {selectedScholarship.type}
-                  </div>
-                  <div className="mb-2">
-                    <span className="font-medium">University:</span> {selectedScholarship.university}
-                  </div>
-                  <div className="mb-2">
-                    <span className="font-medium">Program:</span> {selectedScholarship.program}
-                  </div>
-                  <div className="mb-2">
-                    <span className="font-medium">Requirements:</span> {selectedScholarship.requirements && selectedScholarship.requirements.join(", ")}
-                  </div>
+            <div className="space-y-6">
+              {/* Quick Stats */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Card>
+                  <CardContent className="p-4 text-center">
+                    <DollarSign className="w-8 h-8 text-primary mx-auto mb-2" />
+                    <div className="text-xl font-bold text-gray-900">{selectedScholarship.amount}</div>
+                    <div className="text-sm text-gray-600">Scholarship Amount</div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4 text-center">
+                    <Clock className="w-8 h-8 text-orange-600 mx-auto mb-2" />
+                    <div className="text-xl font-bold text-gray-900">{selectedScholarship.deadline}</div>
+                    <div className="text-sm text-gray-600">Application Deadline</div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4 text-center">
+                    <GraduationCap className="w-8 h-8 text-green-600 mx-auto mb-2" />
+                    <div className="text-xl font-bold text-gray-900">{selectedScholarship.level}</div>
+                    <div className="text-sm text-gray-600">Education Level</div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4 text-center">
+                    <Award className="w-8 h-8 text-purple-600 mx-auto mb-2" />
+                    <div className="text-xl font-bold text-gray-900">{selectedScholarship.type}</div>
+                    <div className="text-sm text-gray-600">Scholarship Type</div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Main Content */}
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="md:col-span-2 space-y-6">
+                  <Card>
+                    <CardContent className="p-6">
+                      <h3 className="text-lg font-semibold mb-4">About this Scholarship</h3>
+                      <p className="text-gray-600 mb-6">{selectedScholarship.description}</p>
+                      
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-medium mb-2">Eligibility</h4>
+                          <p className="text-gray-600">{selectedScholarship.eligibility}</p>
+                        </div>
+                        
+                        <div>
+                          <h4 className="font-medium mb-2">Requirements</h4>
+                          <ul className="list-disc list-inside text-gray-600">
+                            {selectedScholarship.requirements?.map((req, index) => (
+                              <li key={index}>{req}</li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div>
+                          <h4 className="font-medium mb-2">Selection Criteria</h4>
+                          <ul className="list-disc list-inside text-gray-600">
+                            {selectedScholarship.selectionCriteria?.map((criteria, index) => (
+                              <li key={index}>{criteria}</li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div>
+                          <h4 className="font-medium mb-2">Fields of Study</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {selectedScholarship.fields?.map((field, index) => (
+                              <Badge key={index} variant="secondary">{field}</Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <div className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Additional Information</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div>
+                        <h4 className="font-medium mb-2">Disbursement Schedule</h4>
+                        <p className="text-gray-600">{selectedScholarship.disbursementSchedule}</p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-medium mb-2">Renewal Terms</h4>
+                        <p className="text-gray-600">{selectedScholarship.renewalTerms}</p>
+                      </div>
+
+                      <div>
+                        <h4 className="font-medium mb-2">Contact Information</h4>
+                        <p className="text-gray-600">{selectedScholarship.contactEmail}</p>
+                      </div>
+
+                      <Button
+                        className="w-full"
+                        onClick={() => window.open(selectedScholarship.applicationUrl, '_blank')}
+                      >
+                        Apply Now
+                      </Button>
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
             </div>

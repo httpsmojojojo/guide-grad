@@ -7,22 +7,33 @@ import {
   where,
   orderBy,
   limit,
-  startAfter
+  startAfter,
+  Query,
+  DocumentData
 } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 
 export interface Scholarship {
   id: string
-  title: string
-  description: string
-  amount: string
-  deadline: string
-  requirements: string[]
-  university: string
-  program: string
-  type: 'merit' | 'need' | 'sports' | 'research'
-  applicationUrl: string
-  imageUrl: string
+  amount: string 
+  applicants: string 
+  applicationUrl: string 
+  awards: string 
+  contactEmail: string 
+  deadline: string 
+  description: string 
+  disbursementSchedule: string 
+  eligibility: string 
+  fields: string[] 
+  level: string
+  provider: string
+  renewalTerms: string 
+  requirements: string[] 
+  selectionCriteria: string[] 
+  status: string 
+  title: string 
+  type: string 
+
 }
 
 export interface ScholarshipFilters {
@@ -35,7 +46,8 @@ export interface ScholarshipFilters {
 export const scholarshipsApi = {
   async getScholarships(filters?: ScholarshipFilters, lastDoc?: any) {
     try {
-      let q = collection(db, 'scholarships')
+      const scholarshipsRef = collection(db, 'scholarships')
+      let q: Query<DocumentData>
       
       // Apply filters if provided
       if (filters) {
@@ -53,9 +65,9 @@ export const scholarshipsApi = {
           constraints.push(where('amount', '>=', filters.minAmount))
         }
         
-        q = query(q, ...constraints, orderBy('deadline', 'asc'), limit(10))
+        q = query(scholarshipsRef, ...constraints, orderBy('deadline', 'asc'), limit(10))
       } else {
-        q = query(q, orderBy('deadline', 'asc'), limit(10))
+        q = query(scholarshipsRef, orderBy('deadline', 'asc'), limit(10))
       }
 
       // Apply pagination if lastDoc is provided

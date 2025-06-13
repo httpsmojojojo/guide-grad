@@ -15,7 +15,6 @@ import {
   TrendingUp,
   Star,
   Quote,
-  Calendar,
   Mail,
   Phone,
 } from "lucide-react"
@@ -376,8 +375,8 @@ export default function AboutPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-700 leading-relaxed">
-                    To become the leading education consultancy in South Asia, recognized for innovation, integrity, and
-                    impact in transforming lives through education. We envision a world where every student has equal
+                    To become the leading education consultancy in Pakistan, recognized for innovation, integrity, and
+                    impact in transforming lives through education. We envision a Pakistan where every student has equal
                     access to quality guidance.
                   </p>
                 </CardContent>
@@ -602,7 +601,7 @@ export default function AboutPage() {
                   Contact Us Today
                 </Button>
               </Link>
-              <Link href="/contact">
+              <Link href="/book-call">
                 <Button size="lg" variant="secondary">
                   <Phone className="w-5 h-5 mr-2" />
                   Book Free Consultation
