@@ -15,6 +15,9 @@ import {
   AlertCircle,
   BookmarkCheck,
   BookmarkPlus,
+  Users,
+  DollarSign,
+  CheckCircle,
 } from "lucide-react"
 import Link from "next/link"
 import { universitiesApi } from "@/lib/api"
@@ -207,13 +210,13 @@ export default function UniversitiesPage() {
             const website = university.website;
             
             return (
-              <Card key={university.id} className="flex flex-col md:flex-row items-stretch min-h-[280px] sm:min-h-[320px] border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
-                {/* Image Section */}
-                <div className="flex-shrink-0 flex items-center justify-center bg-gray-50 md:w-48 w-full h-40 sm:h-48 md:h-auto relative p-4">
+              <Card key={university.id} className="flex flex-col items-stretch border border-gray-200 shadow-md rounded-xl overflow-hidden bg-white hover:shadow-lg transition-shadow duration-200">
+                {/* Image on top */}
+                <div className="w-full h-[200px] bg-gray-50 relative">
                   <img
                     src={image}
                     alt={name}
-                    className="w-28 h-28 sm:w-36 sm:h-36 object-contain rounded-lg"
+                    className="w-full h-full object-cover rounded-t-xl shadow-sm"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
                       const parent = e.currentTarget.parentElement;
@@ -225,87 +228,70 @@ export default function UniversitiesPage() {
                       }
                     }}
                   />
-                  {/* Heart Button */}
-                  {isAuthenticated && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="absolute top-2 right-2 bg-white/80 hover:bg-white z-10"
-                      onClick={() => handleSaveUniversity(university.id as string)}
-                      disabled={isSaving === university.id}
-                    >
-                      {isSaving === university.id ? (
-                        <Loader2 className="h-5 w-5 animate-spin" />
-                      ) : savedUniversities.includes(university.id as string) ? (
-                        <BookmarkCheck className="h-5 w-5 text-primary" />
-                      ) : (
-                        <BookmarkPlus className="h-5 w-5" />
-                      )}
-                    </Button>
-                  )}
                 </div>
-                {/* Info Section */}
-                <div className="flex flex-col flex-1 p-4 sm:p-6 gap-2 justify-between min-w-0">
-                  <div className="flex flex-col gap-2 min-w-0">
-                    <div className="flex items-center gap-2 mb-1 min-w-0">
-                      <h2 className="text-base sm:text-lg md:text-xl font-bold leading-tight flex-1 break-words min-w-0">{name}</h2>
+                {/* Content */}
+                <div className="flex flex-col flex-1 p-5 gap-3">
+                  {/* Name, location, badges */}
+                  <div className="flex flex-col gap-1">
+                    <h2 className="text-lg font-bold text-gray-900 truncate">{name}</h2>
+                    <div className="flex items-center gap-2 text-gray-500 text-sm">
+                      <MapPin className="w-4 h-4" />
+                      <span>{location}</span>
                     </div>
-                    <div className="flex items-center gap-2 mb-2 min-w-0">
-                      <MapPin className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                      <span className="text-sm sm:text-base text-gray-600 truncate">{location}</span>
-                    </div>
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      <Badge variant="secondary" className="text-xs sm:text-sm">{type}</Badge>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      <Badge variant="secondary" className="text-xs">{type}</Badge>
                       {ranking && (
-                        <Badge variant="secondary" className="text-xs sm:text-sm">
-                          Rank #{ranking}
-                        </Badge>
+                        <Badge variant="secondary" className="text-xs">Rank #{ranking}</Badge>
                       )}
                       {rating && (
                         <div className="flex items-center gap-1">
                           <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                          <span className="text-xs sm:text-sm text-gray-600">{rating.toFixed(1)}</span>
+                          <span className="text-xs text-gray-600">{rating.toFixed(1)}</span>
                         </div>
                       )}
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
-                      {students && (
-                        <div className="flex flex-col">
-                          <span className="text-gray-500 text-xs">Students</span>
-                          <span className="font-medium">{students.toLocaleString()}</span>
-                        </div>
-                      )}
-                      {tuition && (
-                        <div className="flex flex-col">
-                          <span className="text-gray-500 text-xs">Tuition</span>
-                          <span className="font-medium">Rs. {tuition.toLocaleString()}</span>
-                        </div>
-                      )}
-                      {acceptance && (
-                        <div className="flex flex-col">
-                          <span className="text-gray-500 text-xs">Acceptance</span>
-                          <span className="font-medium">{acceptance}%</span>
-                        </div>
-                      )}
-                    </div>
-                    {programs && programs.length > 0 && (
-                      <div className="mt-2">
-                        <div className="flex flex-wrap gap-1">
-                          {programs.slice(0, 3).map((program, index) => (
-                            <Badge key={index} variant="outline" className="text-xs">
-                              {program}
-                            </Badge>
-                          ))}
-                          {programs.length > 3 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{programs.length - 3} more
-                            </Badge>
-                          )}
-                        </div>
+                  </div>
+                  {/* Stats row */}
+                  <div className="flex justify-between text-xs text-gray-600 bg-gray-50 rounded-lg px-3 py-2 mt-2">
+                    {students && (
+                      <div className="flex flex-col items-center">
+                        <Users className="w-4 h-4 mb-1" />
+                        <span className="font-medium">{students.toLocaleString()}</span>
+                        <span>Students</span>
+                      </div>
+                    )}
+                    {tuition && (
+                      <div className="flex flex-col items-center">
+                        <DollarSign className="w-4 h-4 mb-1" />
+                        <span className="font-medium">Rs. {tuition.toLocaleString()}</span>
+                        <span>Tuition</span>
+                      </div>
+                    )}
+                    {acceptance && (
+                      <div className="flex flex-col items-center">
+                        <CheckCircle className="w-4 h-4 mb-1" />
+                        <span className="font-medium">{acceptance}%</span>
+                        <span>Acceptance</span>
                       </div>
                     )}
                   </div>
-                  <div className="mt-4 flex flex-col sm:flex-row gap-2">
+                  {/* Programs */}
+                  {programs && programs.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {programs.slice(0, 3).map((program, index) => (
+                        <Badge key={index} variant="outline" className="text-xs">
+                          {program}
+                        </Badge>
+                      ))}
+                      {programs.length > 3 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{programs.length - 3} more
+                        </Badge>
+                      )}
+                    </div>
+                  )}
+                  {/* Action buttons */}
+                  <div className="flex gap-2 mt-4">
                     <Link href={`/universities/${university.id}`} className="flex-1">
                       <Button className="w-full">View Details</Button>
                     </Link>
