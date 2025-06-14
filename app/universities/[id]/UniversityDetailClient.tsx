@@ -330,12 +330,6 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
                     ))}
                   </ul>
                 </div>
-                <Button
-                  className="w-full"
-                  onClick={() => setShowContactDialog(true)}
-                >
-                  Contact University
-                </Button>
               </CardContent>
             </Card>
           </div>

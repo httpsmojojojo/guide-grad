@@ -126,7 +126,10 @@ export const universitiesApi = {
       
       if (docSnap.exists()) {
         const data = docSnap.data()
-        if (!data) return null;
+        if (!data) {
+          console.log('University document exists but has no data:', id)
+          return null;
+        }
         
         console.log('Found university:', { id: docSnap.id, name: data.name })
         return { 
@@ -220,6 +223,16 @@ export const universitiesApi = {
           universities.push(university)
         } else {
           console.log('University not found for ID:', id)
+          // Remove the saved university if it no longer exists
+          try {
+            const savedDoc = savedSnapshot.docs.find(doc => doc.data().universityId === id)
+            if (savedDoc) {
+              await deleteDoc(doc(savedRef, savedDoc.id))
+              console.log('Removed non-existent saved university:', id)
+            }
+          } catch (error) {
+            console.error('Error removing non-existent saved university:', error)
+          }
         }
       }
 

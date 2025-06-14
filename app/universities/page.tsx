@@ -78,8 +78,12 @@ export default function UniversitiesPage() {
       console.log('Loading saved universities...')
       const saved = await universitiesApi.getSavedUniversities()
       console.log('Loaded saved universities:', saved)
-      setSavedUniversities(saved.map(uni => uni.id).filter(Boolean) as string[])
-      console.log('Updated savedUniversities state:', saved.map(uni => uni.id))
+      // Filter out any universities that might have been deleted
+      const validSavedIds = saved
+        .filter(uni => uni && uni.id)
+        .map(uni => uni.id as string)
+      console.log('Valid saved university IDs:', validSavedIds)
+      setSavedUniversities(validSavedIds)
     } catch (error: any) {
       console.error("Failed to load saved universities:", error)
       // Don't set error state here as it's not critical
@@ -153,17 +157,17 @@ export default function UniversitiesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6 sm:py-8">
         {/* Page Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-4">Universities</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-4xl font-bold text-primary mb-2 sm:mb-4">Universities</h1>
+          <p className="text-base sm:text-xl text-gray-600 max-w-3xl mx-auto">
             Explore top universities in Pakistan and find the perfect fit for your academic journey
           </p>
         </div>
 
-        {/* Search Bar Only (no filter button) */}
-        <div className="mb-8">
+        {/* Search Bar */}
+        <div className="mb-6 sm:mb-8">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
@@ -171,7 +175,7 @@ export default function UniversitiesPage() {
                 <Input
                   type="text"
                   placeholder="Search universities or programs..."
-                  className="pl-10"
+                  className="pl-10 h-12 text-base"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -181,16 +185,15 @@ export default function UniversitiesPage() {
         </div>
 
         {/* Results Count */}
-        <div className="mb-6">
-          <p className="text-gray-600">
+        <div className="mb-4 sm:mb-6">
+          <p className="text-sm sm:text-base text-gray-600">
             Showing {filteredUniversities.length} of {universities.length} universities
           </p>
         </div>
 
         {/* Universities Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {filteredUniversities.map((university) => {
-            // Use fields directly from the University interface
             const name = university.name;
             const location = university.location;
             const type = university.type;
@@ -204,13 +207,13 @@ export default function UniversitiesPage() {
             const website = university.website;
             
             return (
-              <Card key={university.id} className="flex flex-col md:flex-row items-stretch min-h-[320px] border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
+              <Card key={university.id} className="flex flex-col md:flex-row items-stretch min-h-[280px] sm:min-h-[320px] border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
                 {/* Image Section */}
-                <div className="flex-shrink-0 flex items-center justify-center bg-gray-50 md:w-48 w-full h-48 md:h-auto relative p-4">
+                <div className="flex-shrink-0 flex items-center justify-center bg-gray-50 md:w-48 w-full h-40 sm:h-48 md:h-auto relative p-4">
                   <img
                     src={image}
                     alt={name}
-                    className="w-36 h-36 object-contain rounded-lg"
+                    className="w-28 h-28 sm:w-36 sm:h-36 object-contain rounded-lg"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
                       const parent = e.currentTarget.parentElement;
@@ -242,50 +245,80 @@ export default function UniversitiesPage() {
                   )}
                 </div>
                 {/* Info Section */}
-                <div className="flex flex-col flex-1 p-6 gap-2 justify-between min-w-0">
+                <div className="flex flex-col flex-1 p-4 sm:p-6 gap-2 justify-between min-w-0">
                   <div className="flex flex-col gap-2 min-w-0">
                     <div className="flex items-center gap-2 mb-1 min-w-0">
-                      <h2 className="text-lg md:text-xl font-bold leading-tight flex-1 break-words min-w-0">{name}</h2>
+                      <h2 className="text-base sm:text-lg md:text-xl font-bold leading-tight flex-1 break-words min-w-0">{name}</h2>
                     </div>
                     <div className="flex items-center gap-2 mb-2 min-w-0">
-                      <MapPin className="h-4 w-4 text-gray-500 flex-shrink-0" />
-                      <span className="text-sm text-gray-700 truncate">{location}</span>
-                      <Badge variant="secondary" className="ml-2 px-2 py-0.5 text-xs whitespace-nowrap">{type}</Badge>
+                      <MapPin className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                      <span className="text-sm sm:text-base text-gray-600 truncate">{location}</span>
                     </div>
-                    <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-700 mb-2 min-w-0">
-                      <span className="truncate">Ranking: <span className="font-medium">{ranking}</span></span>
-                      <span className="truncate">Students: <span className="font-medium">{students}</span></span>
-                      <span className="truncate">Tuition: <span className="font-medium">{tuition}</span></span>
-                      <span className="truncate">Acceptance: <span className="font-medium">{acceptance}</span></span>
-                    </div>
-                    <div className="mb-2 min-w-0">
-                      <span className="text-sm text-gray-700 font-medium">Popular Programs:</span>
-                      <div className="flex flex-wrap gap-2 mt-1">
-                        {programs.slice(0, 3).map((program, idx) => (
-                          <Badge key={program} variant="secondary" className="px-3 py-0.5 text-xs font-semibold whitespace-nowrap">{program}</Badge>
-                        ))}
-                        {programs.length > 3 && (
-                          <Badge variant="secondary" className="px-3 py-0.5 text-xs font-semibold whitespace-nowrap">+{programs.length - 3} more</Badge>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  {/* Rating and Buttons at the bottom */}
-                  <div className="flex flex-col gap-2 mt-auto">
-                    <div className="flex items-center gap-1 text-yellow-500 text-base font-semibold mb-2">
-                      <Star className="h-5 w-5 fill-yellow-400 text-yellow-400 mr-1" />
-                      <span className="text-lg font-bold text-gray-900">{rating}</span>
-                    </div>
-                    <div className="flex gap-2">
-                      {website && (
-                        <a href={website} target="_blank" rel="noopener noreferrer">
-                          <Button variant="outline" className="px-4 py-2 text-sm">Visit</Button>
-                        </a>
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      <Badge variant="secondary" className="text-xs sm:text-sm">{type}</Badge>
+                      {ranking && (
+                        <Badge variant="secondary" className="text-xs sm:text-sm">
+                          Rank #{ranking}
+                        </Badge>
                       )}
-                      <Link href={`/universities/${university.id}`}>
-                        <Button className="px-4 py-2 text-sm">View Details</Button>
-                      </Link>
+                      {rating && (
+                        <div className="flex items-center gap-1">
+                          <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                          <span className="text-xs sm:text-sm text-gray-600">{rating.toFixed(1)}</span>
+                        </div>
+                      )}
                     </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
+                      {students && (
+                        <div className="flex flex-col">
+                          <span className="text-gray-500 text-xs">Students</span>
+                          <span className="font-medium">{students.toLocaleString()}</span>
+                        </div>
+                      )}
+                      {tuition && (
+                        <div className="flex flex-col">
+                          <span className="text-gray-500 text-xs">Tuition</span>
+                          <span className="font-medium">Rs. {tuition.toLocaleString()}</span>
+                        </div>
+                      )}
+                      {acceptance && (
+                        <div className="flex flex-col">
+                          <span className="text-gray-500 text-xs">Acceptance</span>
+                          <span className="font-medium">{acceptance}%</span>
+                        </div>
+                      )}
+                    </div>
+                    {programs && programs.length > 0 && (
+                      <div className="mt-2">
+                        <div className="flex flex-wrap gap-1">
+                          {programs.slice(0, 3).map((program, index) => (
+                            <Badge key={index} variant="outline" className="text-xs">
+                              {program}
+                            </Badge>
+                          ))}
+                          {programs.length > 3 && (
+                            <Badge variant="outline" className="text-xs">
+                              +{programs.length - 3} more
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="mt-4 flex flex-col sm:flex-row gap-2">
+                    <Link href={`/universities/${university.id}`} className="flex-1">
+                      <Button className="w-full">View Details</Button>
+                    </Link>
+                    {website && (
+                      <a
+                        href={website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1"
+                      >
+                        <Button variant="outline" className="w-full">Visit Website</Button>
+                      </a>
+                    )}
                   </div>
                 </div>
               </Card>
@@ -314,19 +347,19 @@ export default function UniversitiesPage() {
 
         {/* Load More Button */}
         {hasMore && (
-          <div className="flex justify-center mt-8">
+          <div className="mt-8 text-center">
             <Button
-              variant="outline"
               onClick={() => loadUniversities(true)}
               disabled={isLoadingMore}
+              className="w-full sm:w-auto"
             >
               {isLoadingMore ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Loading...
                 </>
               ) : (
-                "Load More"
+                'Load More'
               )}
             </Button>
           </div>

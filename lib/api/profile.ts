@@ -12,6 +12,7 @@ export interface ProfileData {
   interestedField: string
   extracurricularActivities: string
   personalStatement: string
+  reference?: string
 }
 
 export const profileApi = {
@@ -26,24 +27,33 @@ export const profileApi = {
         updatedAt: new Date().toISOString()
       })
     } catch (error: any) {
-      throw new Error(error.message)
+      console.error('Error creating profile:', error)
+      throw new Error('Failed to create profile. Please try again.')
     }
   },
 
   async getProfile() {
     const user = authApi.getCurrentUser()
-    if (!user) throw new Error('No authenticated user')
+    if (!user) {
+      console.log('No authenticated user found in getProfile')
+      throw new Error('No authenticated user')
+    }
 
     try {
+      console.log('Fetching profile for user:', user.uid)
       const docRef = doc(db, 'profiles', user.uid)
       const docSnap = await getDoc(docRef)
       
       if (docSnap.exists()) {
-        return docSnap.data() as ProfileData
+        const data = docSnap.data()
+        console.log('Profile data found:', data)
+        return data as ProfileData
       }
+      console.log('No profile document found for user:', user.uid)
       return null
     } catch (error: any) {
-      throw new Error(error.message)
+      console.error('Error fetching profile:', error)
+      throw new Error(error.message || 'Failed to fetch profile')
     }
   },
 

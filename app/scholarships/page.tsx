@@ -77,65 +77,65 @@ export default function ScholarshipsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-4 sm:py-8">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Scholarships</h1>
-          <p className="text-gray-600">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Scholarships</h1>
+          <p className="text-sm sm:text-base text-gray-600">
             Find and apply for scholarships that match your academic goals and qualifications.
           </p>
         </div>
 
         {/* Statistics */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
           <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-primary-light rounded-lg">
-                  <DollarSign className="w-6 h-6 text-primary" />
+            <CardContent className="p-3 sm:p-6">
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className="p-2 sm:p-3 bg-primary-light rounded-lg">
+                  <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Total Value</p>
-                  <p className="text-2xl font-semibold text-primary">$2.5M+</p>
+                  <p className="text-xs sm:text-sm text-gray-600">Total Value</p>
+                  <p className="text-lg sm:text-2xl font-semibold text-primary">$2.5M+</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-primary-light rounded-lg">
-                  <Award className="w-6 h-6 text-primary" />
+            <CardContent className="p-3 sm:p-6">
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className="p-2 sm:p-3 bg-primary-light rounded-lg">
+                  <Award className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Available</p>
-                  <p className="text-2xl font-semibold text-primary">150+</p>
+                  <p className="text-xs sm:text-sm text-gray-600">Available</p>
+                  <p className="text-lg sm:text-2xl font-semibold text-primary">150+</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-primary-light rounded-lg">
-                  <Users className="w-6 h-6 text-primary" />
+            <CardContent className="p-3 sm:p-6">
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className="p-2 sm:p-3 bg-primary-light rounded-lg">
+                  <Users className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Recipients</p>
-                  <p className="text-2xl font-semibold text-primary">500+</p>
+                  <p className="text-xs sm:text-sm text-gray-600">Recipients</p>
+                  <p className="text-lg sm:text-2xl font-semibold text-primary">500+</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-primary-light rounded-lg">
-                  <TrendingUp className="w-6 h-6 text-primary" />
+            <CardContent className="p-3 sm:p-6">
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className="p-2 sm:p-3 bg-primary-light rounded-lg">
+                  <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Success Rate</p>
-                  <p className="text-2xl font-semibold text-primary">85%</p>
+                  <p className="text-xs sm:text-sm text-gray-600">Success Rate</p>
+                  <p className="text-lg sm:text-2xl font-semibold text-primary">85%</p>
                 </div>
               </div>
             </CardContent>
@@ -144,8 +144,8 @@ export default function ScholarshipsPage() {
 
         {/* All Scholarships */}
         <div>
-          <h3 className="text-xl font-semibold text-primary mb-4">All Scholarships</h3>
-          <div className="space-y-4">
+          <h3 className="text-lg sm:text-xl font-semibold text-primary mb-3 sm:mb-4">All Scholarships</h3>
+          <div className="space-y-3 sm:space-y-4">
             {scholarships.map((scholarship) => {
               const deadlineStatus = getDeadlineStatus(scholarship.deadline)
               const daysLeft = getDaysUntilDeadline(scholarship.deadline)
@@ -153,32 +153,32 @@ export default function ScholarshipsPage() {
               return (
                 <Card key={scholarship.id} className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
                   {/* Info Section */}
-                  <div className="p-6">
+                  <div className="p-4 sm:p-6">
                     <div className="flex flex-col gap-2 min-w-0">
                       <div className="flex items-center gap-2 mb-1 min-w-0">
-                        <h2 className="text-lg md:text-xl font-bold leading-tight flex-1 break-words min-w-0">{scholarship.title}</h2>
+                        <h2 className="text-base sm:text-lg md:text-xl font-bold leading-tight flex-1 break-words min-w-0">{scholarship.title}</h2>
                       </div>
                       <div className="flex items-center gap-2 mb-2 min-w-0">
                         <Building className="h-4 w-4 text-gray-500 flex-shrink-0" />
-                        <span className="text-sm text-gray-700 truncate">{scholarship.provider}</span>
+                        <span className="text-xs sm:text-sm text-gray-700 truncate">{scholarship.provider}</span>
                         <Badge variant="secondary" className={`ml-2 px-2 py-0.5 text-xs whitespace-nowrap ${deadlineStatus.bg} ${deadlineStatus.color}`}>
                           {daysLeft > 0 ? `${daysLeft} days left` : "Expired"}
                         </Badge>
                       </div>
-                      <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-700 mb-2 min-w-0">
+                      <div className="flex flex-wrap gap-x-4 sm:gap-x-6 gap-y-1 text-xs sm:text-sm text-gray-700 mb-2 min-w-0">
                         <span className="truncate">Amount: <span className="font-medium text-primary">{scholarship.amount}</span></span>
                         <span className="truncate">Type: <span className="font-medium">{scholarship.type}</span></span>
                         <span className="truncate">Level: <span className="font-medium">{scholarship.level}</span></span>
                       </div>
-                      <p className="text-sm text-gray-600 line-clamp-2">{scholarship.description}</p>
+                      <p className="text-xs sm:text-sm text-gray-600 line-clamp-2">{scholarship.description}</p>
                       <div className="mt-2">
-                        <span className="text-sm text-gray-700 font-medium">Fields:</span>
-                        <div className="flex flex-wrap gap-2 mt-1">
+                        <span className="text-xs sm:text-sm text-gray-700 font-medium">Fields:</span>
+                        <div className="flex flex-wrap gap-1 sm:gap-2 mt-1">
                           {scholarship.fields?.slice(0, 3).map((field, idx) => (
-                            <Badge key={idx} variant="secondary" className="px-3 py-0.5 text-xs font-semibold whitespace-nowrap">{field}</Badge>
+                            <Badge key={idx} variant="secondary" className="px-2 sm:px-3 py-0.5 text-xs font-semibold whitespace-nowrap">{field}</Badge>
                           ))}
                           {scholarship.fields && scholarship.fields.length > 3 && (
-                            <Badge variant="secondary" className="px-3 py-0.5 text-xs font-semibold whitespace-nowrap">+{scholarship.fields.length - 3} more</Badge>
+                            <Badge variant="secondary" className="px-2 sm:px-3 py-0.5 text-xs font-semibold whitespace-nowrap">+{scholarship.fields.length - 3} more</Badge>
                           )}
                         </div>
                       </div>
@@ -186,13 +186,13 @@ export default function ScholarshipsPage() {
 
                     {/* Buttons at the bottom */}
                     <div className="flex gap-2 mt-4 pt-4 border-t">
-                      <Button variant="outline" size="sm" onClick={() => openDetailsDialog(scholarship)}>
+                      <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={() => openDetailsDialog(scholarship)}>
                         <Eye className="w-4 h-4 mr-1" />
                         View Details
                       </Button>
                       <Button
                         size="sm"
-                        className="bg-primary hover:bg-primary-dark"
+                        className="flex-1 sm:flex-none bg-primary hover:bg-primary-dark"
                         onClick={() => window.open(scholarship.applicationUrl, '_blank')}
                       >
                         Website
@@ -208,41 +208,41 @@ export default function ScholarshipsPage() {
 
       {/* Details Dialog */}
       <Dialog open={showDetailsDialog} onOpenChange={setShowDetailsDialog}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">{selectedScholarship?.title}</DialogTitle>
-            <DialogDescription className="text-lg">{selectedScholarship?.provider}</DialogDescription>
+            <DialogTitle className="text-xl sm:text-2xl font-bold">{selectedScholarship?.title}</DialogTitle>
+            <DialogDescription className="text-base sm:text-lg">{selectedScholarship?.provider}</DialogDescription>
           </DialogHeader>
           {selectedScholarship && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* Quick Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                 <Card>
-                  <CardContent className="p-4 text-center">
-                    <DollarSign className="w-8 h-8 text-primary mx-auto mb-2" />
-                    <div className="text-xl font-bold text-gray-900">{selectedScholarship.amount}</div>
-                    <div className="text-sm text-gray-600">Scholarship Amount</div>
+                  <CardContent className="p-3 sm:p-4 text-center">
+                    <DollarSign className="w-6 h-6 sm:w-8 sm:h-8 text-primary mx-auto mb-2" />
+                    <div className="text-lg sm:text-xl font-bold text-gray-900">{selectedScholarship.amount}</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Scholarship Amount</div>
                   </CardContent>
                 </Card>
                 <Card>
-                  <CardContent className="p-4 text-center">
-                    <Clock className="w-8 h-8 text-orange-600 mx-auto mb-2" />
-                    <div className="text-xl font-bold text-gray-900">{selectedScholarship.deadline}</div>
-                    <div className="text-sm text-gray-600">Application Deadline</div>
+                  <CardContent className="p-3 sm:p-4 text-center">
+                    <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600 mx-auto mb-2" />
+                    <div className="text-lg sm:text-xl font-bold text-gray-900">{selectedScholarship.deadline}</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Application Deadline</div>
                   </CardContent>
                 </Card>
                 <Card>
-                  <CardContent className="p-4 text-center">
-                    <GraduationCap className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                    <div className="text-xl font-bold text-gray-900">{selectedScholarship.level}</div>
-                    <div className="text-sm text-gray-600">Education Level</div>
+                  <CardContent className="p-3 sm:p-4 text-center">
+                    <GraduationCap className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 mx-auto mb-2" />
+                    <div className="text-lg sm:text-xl font-bold text-gray-900">{selectedScholarship.level}</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Education Level</div>
                   </CardContent>
                 </Card>
                 <Card>
-                  <CardContent className="p-4 text-center">
-                    <Award className="w-8 h-8 text-purple-600 mx-auto mb-2" />
-                    <div className="text-xl font-bold text-gray-900">{selectedScholarship.type}</div>
-                    <div className="text-sm text-gray-600">Scholarship Type</div>
+                  <CardContent className="p-3 sm:p-4 text-center">
+                    <Award className="w-6 h-6 sm:w-8 sm:h-8 text-purple-600 mx-auto mb-2" />
+                    <div className="text-lg sm:text-xl font-bold text-gray-900">{selectedScholarship.type}</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Scholarship Type</div>
                   </CardContent>
                 </Card>
               </div>

@@ -118,69 +118,69 @@ export default function AmbassadorsPage() {
         buttonText="Got it"
       />
       <Modal isOpen={showMessageDialog} onClose={() => setShowMessageDialog(false)}>
-        <div className="p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Send Message to {selectedAmbassador?.name}</h2>
-          <p className="text-gray-600 mb-6">
+        <div className="p-4 sm:p-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Send Message to {selectedAmbassador?.name}</h2>
+          <p className="text-sm sm:text-base text-gray-600 mb-6">
             Send a message to connect with the ambassador. They typically respond within 24 hours.
           </p>
         </div>
       </Modal>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6 sm:py-8">
         {/* Page Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-4">Student Ambassadors</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-4xl font-bold text-primary mb-2 sm:mb-4">Student Ambassadors</h1>
+          <p className="text-base sm:text-xl text-gray-600 max-w-3xl mx-auto">
             Connect with current students and alumni from your target universities. Get firsthand insights
             and guidance for your academic journey.
           </p>
         </div>
 
         {/* Stats */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card>
-            <CardContent className="p-6 text-center">
-              <Users className="w-8 h-8 text-primary mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">{ambassadors.length}+</div>
-              <div className="text-sm text-gray-600">Active Ambassadors</div>
+            <CardContent className="p-4 sm:p-6 text-center">
+              <Users className="w-6 h-6 sm:w-8 sm:h-8 text-primary mx-auto mb-2" />
+              <div className="text-xl sm:text-2xl font-bold text-gray-900">{ambassadors.length}+</div>
+              <div className="text-xs sm:text-sm text-gray-600">Active Ambassadors</div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-6 text-center">
-              <BookOpen className="w-8 h-8 text-primary mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">20+</div>
-              <div className="text-sm text-gray-600">Universities Covered</div>
+            <CardContent className="p-4 sm:p-6 text-center">
+              <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-primary mx-auto mb-2" />
+              <div className="text-xl sm:text-2xl font-bold text-gray-900">20+</div>
+              <div className="text-xs sm:text-sm text-gray-600">Universities Covered</div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-6 text-center">
-              <MessageCircle className="w-8 h-8 text-primary mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">100+</div>
-              <div className="text-sm text-gray-600">Students Helped</div>
+            <CardContent className="p-4 sm:p-6 text-center">
+              <MessageCircle className="w-6 h-6 sm:w-8 sm:h-8 text-primary mx-auto mb-2" />
+              <div className="text-xl sm:text-2xl font-bold text-gray-900">100+</div>
+              <div className="text-xs sm:text-sm text-gray-600">Students Helped</div>
             </CardContent>
           </Card>
         </div>
 
         {/* Ambassador Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-stretch">
           {ambassadors.map((ambassador) => (
-            <Card key={ambassador.id} className="hover:shadow-lg transition-all duration-200 group min-h-[390px] flex flex-col h-full">
-              <CardHeader className="pb-4">
+            <Card key={ambassador.id} className="hover:shadow-lg transition-all duration-200 group min-h-[360px] sm:min-h-[390px] flex flex-col h-full">
+              <CardHeader className="pb-2 sm:pb-4">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-3 sm:space-x-4">
                     <div className="relative">
                       <Image
                         src={ambassador.image || "/placeholder.svg"}
                         alt={ambassador.name}
-                        width={60}
-                        height={60}
-                        className="rounded-full"
+                        width={48}
+                        height={48}
+                        className="w-12 h-12 sm:w-[60px] sm:h-[60px] rounded-full object-cover"
                       />
                     </div>
                     <div>
-                      <CardTitle className="text-lg group-hover:text-primary transition-colors">
+                      <CardTitle className="text-base sm:text-lg group-hover:text-primary transition-colors">
                         {ambassador.name}
                       </CardTitle>
-                      <CardDescription>
+                      <CardDescription className="text-xs sm:text-sm">
                         {ambassador.university} • {ambassador.program}
                       </CardDescription>
                       {(ambassador as any).location && (
@@ -193,12 +193,12 @@ export default function AmbassadorsPage() {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="flex flex-col flex-1 h-full">
+              <CardContent className="flex flex-col flex-1 h-full p-4 sm:p-6">
                 <div className="flex flex-col flex-1">
                   <div>
-                    <p className="text-sm text-gray-600">{ambassador.bio}</p>
-                    <div className="mt-4 min-h-[40px] flex flex-col justify-end">
-                      <p className="text-xs text-gray-500 mb-2">Specialties:</p>
+                    <p className="text-xs sm:text-sm text-gray-600 line-clamp-3 sm:line-clamp-none">{ambassador.bio}</p>
+                    <div className="mt-3 sm:mt-4 min-h-[40px] flex flex-col justify-end">
+                      <p className="text-xs text-gray-500 mb-1 sm:mb-2">Specialties:</p>
                       <div className="flex flex-wrap gap-1">
                         {ambassador.specialties.length > 0 ? (
                           ambassador.specialties.slice(0, 3).map((specialty, index) => (
@@ -227,10 +227,10 @@ export default function AmbassadorsPage() {
                       </div>
                     )}
                   </div>
-                  <div className="flex space-x-2 mt-auto">
+                  <div className="flex space-x-2 mt-4 sm:mt-auto">
                     <Button
                       size="sm"
-                      className="flex-1 bg-primary hover:bg-primary-dark"
+                      className="flex-1 bg-primary hover:bg-primary-dark text-sm"
                       onClick={openMessageDialog}
                     >
                       <MessageCircle className="w-4 h-4 mr-1" />
@@ -244,19 +244,21 @@ export default function AmbassadorsPage() {
         </div>
 
         {/* CTA Section */}
-        <Card className="mt-12 bg-primary text-white">
-          <CardContent className="p-8 text-center">
-            <Award className="w-12 h-12 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold mb-4">Become an Ambassador</h3>
-            <p className="text-primary-light mb-6 max-w-2xl mx-auto">
-              Are you a current student or recent graduate? Help other students by sharing your experience and earning
-              rewards.
+        <Card className="mt-8 sm:mt-12 bg-primary text-white">
+          <CardContent className="p-6 sm:p-8 text-center">
+            <Award className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4" />
+            <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Become an Ambassador</h3>
+            <p className="text-sm sm:text-base text-primary-light mb-4 sm:mb-6">
+              Share your university experience and help guide future students
             </p>
             <Button
+              size="lg"
+              variant="secondary"
+              className="w-full sm:w-auto bg-white text-primary hover:bg-gray-100"
               onClick={handleApplyClick}
-              className="bg-white text-primary hover:bg-primary-light"
             >
-              Apply to be an Ambassador
+              Apply Now
+              <Rocket className="ml-2 w-4 h-4" />
             </Button>
           </CardContent>
         </Card>

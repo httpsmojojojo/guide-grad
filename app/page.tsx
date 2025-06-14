@@ -9,29 +9,29 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
       {/* Hero Section */}
-      <section className="py-20 px-4">
+      <section className="py-12 sm:py-20 px-4">
         <div className="container mx-auto text-center">
           <Badge className="mb-4 bg-primary-light text-primary border-primary/20">🇵🇰 For Pakistani Students</Badge>
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
             Your Gateway to
             <span className="text-primary block">Higher Education</span>
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto">
             Navigate your path to top universities in Pakistan. Get personalized guidance, connect with
             ambassadors, and make informed decisions about your future.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/signup">
-              <Button size="lg" className="bg-primary hover:bg-primary-dark text-lg px-8">
+            <Link href="/signup" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full bg-primary hover:bg-primary-dark text-lg px-8">
                 Start Your Journey
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
-            <Link href="/book-call">
+            <Link href="/book-call" className="w-full sm:w-auto">
               <Button
                 size="lg"
                 variant="outline"
-                className="text-lg px-8 border-primary text-primary hover:bg-primary-light"
+                className="w-full text-lg px-8 border-primary text-primary hover:bg-primary-light"
               >
                 <Phone className="mr-2 w-5 h-5" />
                 Book Free Consultation
@@ -42,15 +42,15 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 px-4 bg-white">
+      <section className="py-12 sm:py-16 px-4 bg-white">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Guide Grad?</h2>
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Why Choose Guide Grad?</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               We provide comprehensive support for Pakistani students pursuing higher education
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
             <Card className="border-primary-light hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="w-12 h-12 bg-primary-light rounded-lg flex items-center justify-center mb-4">
@@ -137,9 +137,9 @@ export default function LandingPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 px-4 bg-primary text-white">
+      <section className="py-12 sm:py-16 px-4 bg-primary text-white">
         <div className="container mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center">
             <div>
               <div className="text-4xl font-bold mb-2">20+</div>
               <div className="text-primary-light">Universities Listed</div>
@@ -161,12 +161,12 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 px-4 bg-primary-light">
+      <section className="py-12 sm:py-16 px-4 bg-primary-light">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-primary mb-4">What Students Say</h2>
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-primary mb-4">What Students Say</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
                 name: "Ayesha Khan",
@@ -204,21 +204,21 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 bg-primary text-white">
+      <section className="py-12 sm:py-16 px-4 bg-primary text-white">
         <div className="container mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Start Your Journey?</h2>
-          <p className="text-xl text-primary-light mb-8 max-w-2xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Ready to Start Your Journey?</h2>
+          <p className="text-lg sm:text-xl text-primary-light mb-6 sm:mb-8 max-w-2xl mx-auto">
             Join thousands of Pakistani students who have successfully navigated their path to higher education with
             Guide Grad.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/signup">
-              <Button size="lg" className="bg-white text-primary hover:bg-gray-100 text-lg px-8">
+            <Link href="/signup" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full bg-white text-primary hover:bg-gray-100 text-lg px-8">
                 Create Free Account
               </Button>
             </Link>
-            <Link href="/book-call">
-            <Button size="lg" className="bg-white text-primary hover:bg-gray-100 text-lg px-8">
+            <Link href="/book-call" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full bg-white text-primary hover:bg-gray-100 text-lg px-8">
                 Schedule Consultation
               </Button>
             </Link>
@@ -227,15 +227,15 @@ export default function LandingPage() {
       </section>
 
       {/* Feedback Section */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="py-12 sm:py-16 px-4 bg-gray-50">
         <div className="container mx-auto">
           <div className="max-w-2xl mx-auto">
-            <div className="bg-white p-8 rounded-lg shadow-sm">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Share Your Feedback</h2>
+            <div className="bg-white p-6 sm:p-8 rounded-lg shadow-sm">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Share Your Feedback</h2>
               <p className="text-gray-600 mb-6">
                 Help us improve Guide Grad by sharing your suggestions and feedback about our platform.
               </p>
-              <Link href="/feedback">
+              <Link href="/feedback" className="block w-full">
                 <Button className="w-full bg-primary hover:bg-primary-dark text-white">
                   Submit Feedback
                   <ArrowRight className="ml-2 w-4 h-4" />
@@ -275,6 +275,11 @@ export default function LandingPage() {
                 <li>
                   <Link href="/book-call" className="hover:text-white">
                     Book Call
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/feedback" className="hover:text-white">
+                    Feedback
                   </Link>
                 </li>
               </ul>

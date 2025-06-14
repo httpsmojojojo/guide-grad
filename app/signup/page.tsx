@@ -111,10 +111,10 @@ export default function SignUpPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-4">
         <Card className="w-full max-w-md text-center">
-          <CardContent className="p-8">
-            <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Account Created!</h2>
-            <p className="text-gray-600 mb-4">Welcome to Guide Grad. Redirecting to your dashboard...</p>
+          <CardContent className="p-4 sm:p-8">
+            <CheckCircle className="w-12 h-12 sm:w-16 sm:h-16 text-green-600 mx-auto mb-3 sm:mb-4" />
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Account Created!</h2>
+            <p className="text-sm sm:text-base text-gray-600 mb-4">Welcome to Guide Grad. Redirecting to your dashboard...</p>
           </CardContent>
         </Card>
       </div>
@@ -125,69 +125,69 @@ export default function SignUpPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <Card>
-          <CardHeader>
-            <CardTitle className="text-primary">Sign Up</CardTitle>
-            <CardDescription>Join thousands of Pakistani students on their path to success</CardDescription>
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-center text-xl sm:text-2xl text-primary">Sign Up</CardTitle>
+            <CardDescription className="text-sm sm:text-base">Join thousands of Pakistani students on their path to success</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-6">
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="firstName">First Name</Label>
+                  <Label htmlFor="firstName" className="text-sm sm:text-base">First Name</Label>
                   <Input
                     id="firstName"
                     type="text"
                     placeholder="Ahmed"
                     value={formData.firstName}
                     onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                    className={errors.firstName ? "border-red-500" : ""}
+                    className={`h-9 sm:h-10 ${errors.firstName ? "border-red-500" : ""}`}
                   />
                   {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="lastName">Last Name</Label>
+                  <Label htmlFor="lastName" className="text-sm sm:text-base">Last Name</Label>
                   <Input
                     id="lastName"
                     type="text"
                     placeholder="Khan"
                     value={formData.lastName}
                     onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                    className={errors.lastName ? "border-red-500" : ""}
+                    className={`h-9 sm:h-10 ${errors.lastName ? "border-red-500" : ""}`}
                   />
                   {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-sm sm:text-base">Email</Label>
                 <Input
                   id="email"
                   type="email"
                   placeholder="ahmed@example.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className={errors.email ? "border-red-500" : ""}
+                  className={`h-9 sm:h-10 ${errors.email ? "border-red-500" : ""}`}
                 />
                 {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
               </div>
 
               <div>
-                <Label htmlFor="phone">Phone Number</Label>
+                <Label htmlFor="phone" className="text-sm sm:text-base">Phone Number</Label>
                 <Input
                   id="phone"
                   type="tel"
                   placeholder="+92-300-1234567"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className={errors.phone ? "border-red-500" : ""}
+                  className={`h-9 sm:h-10 ${errors.phone ? "border-red-500" : ""}`}
                 />
                 {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
               </div>
 
               <div>
-                <Label htmlFor="city">City</Label>
+                <Label htmlFor="city" className="text-sm sm:text-base">City</Label>
                 <Select onValueChange={(value) => setFormData({ ...formData, city: value })}>
-                  <SelectTrigger className={errors.city ? "border-red-500" : ""}>
+                  <SelectTrigger className={`h-9 sm:h-10 ${errors.city ? "border-red-500" : ""}`}>
                     <SelectValue placeholder="Select your city" />
                   </SelectTrigger>
                   <SelectContent>
@@ -206,9 +206,9 @@ export default function SignUpPage() {
               </div>
 
               <div>
-                <Label htmlFor="currentEducation">Current Education Level</Label>
+                <Label htmlFor="currentEducation" className="text-sm sm:text-base">Current Education Level</Label>
                 <Select onValueChange={(value) => setFormData({ ...formData, currentEducation: value })}>
-                  <SelectTrigger className={errors.currentEducation ? "border-red-500" : ""}>
+                  <SelectTrigger className={`h-9 sm:h-10 ${errors.currentEducation ? "border-red-500" : ""}`}>
                     <SelectValue placeholder="Select your current level" />
                   </SelectTrigger>
                   <SelectContent>
@@ -223,9 +223,9 @@ export default function SignUpPage() {
               </div>
 
               <div>
-                <Label htmlFor="interestedField">Field of Interest</Label>
+                <Label htmlFor="interestedField" className="text-sm sm:text-base">Field of Interest</Label>
                 <Select onValueChange={(value) => setFormData({ ...formData, interestedField: value })}>
-                  <SelectTrigger className={errors.interestedField ? "border-red-500" : ""}>
+                  <SelectTrigger className={`h-9 sm:h-10 ${errors.interestedField ? "border-red-500" : ""}`}>
                     <SelectValue placeholder="Select your field of interest" />
                   </SelectTrigger>
                   <SelectContent>
@@ -243,81 +243,93 @@ export default function SignUpPage() {
               </div>
 
               <div>
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-sm sm:text-base">Password</Label>
                 <Input
                   id="password"
                   type="password"
                   placeholder="Create a strong password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className={errors.password ? "border-red-500" : ""}
+                  className={`h-9 sm:h-10 ${errors.password ? "border-red-500" : ""}`}
                 />
                 {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
               </div>
 
               <div>
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Label htmlFor="confirmPassword" className="text-sm sm:text-base">Confirm Password</Label>
                 <Input
                   id="confirmPassword"
                   type="password"
                   placeholder="Confirm your password"
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                  className={errors.confirmPassword ? "border-red-500" : ""}
+                  className={`h-9 sm:h-10 ${errors.confirmPassword ? "border-red-500" : ""}`}
                 />
                 {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
               </div>
 
-              <div>
-                <Label htmlFor="reference">Reference (optional)</Label>
+              <div className="space-y-2">
+                <label htmlFor="reference" className="text-sm font-medium">
+                  Reference (optional)
+                </label>
                 <Input
                   id="reference"
+                  name="reference"
                   type="text"
-                  placeholder="Who referred you? (optional)"
-                  value={formData.reference}
-                  onChange={(e) => setFormData({ ...formData, reference: e.target.value })}
+                  placeholder="Enter reference code (if any)"
+                  className="h-10"
+                  value={formData.reference || ""}
+                  onChange={e => setFormData({ ...formData, reference: e.target.value })}
                 />
               </div>
 
-              <div className="flex items-center space-x-2">
+              <div className="flex items-start space-x-2">
                 <Checkbox
-                  id="terms"
+                  id="agreeTerms"
                   checked={formData.agreeTerms}
                   onCheckedChange={(checked) => setFormData({ ...formData, agreeTerms: checked as boolean })}
+                  className={errors.agreeTerms ? "border-red-500" : ""}
                 />
-                <Label htmlFor="terms" className="text-sm">
-                  I agree to the{" "}
-                  <Link href="/terms-of-service" className="text-primary hover:underline">
-                    Terms of Service
-                  </Link>{" "}
-                  and{" "}
-                  <Link href="/privacy-policy" className="text-primary hover:underline">
-                    Privacy Policy
-                  </Link>
-                </Label>
+                <div className="grid gap-1.5 leading-none">
+                  <label
+                    htmlFor="agreeTerms"
+                    className="text-sm sm:text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    I agree to the{" "}
+                    <Link href="/terms-of-service" className="text-primary hover:underline">
+                      Terms of Service
+                    </Link>{" "}
+                    and{" "}
+                    <Link href="/privacy-policy" className="text-primary hover:underline">
+                      Privacy Policy
+                    </Link>
+                  </label>
+                  {errors.agreeTerms && <p className="text-red-500 text-xs">{errors.agreeTerms}</p>}
+                </div>
               </div>
-              {errors.agreeTerms && <p className="text-red-500 text-xs">{errors.agreeTerms}</p>}
 
-              {submitStatus === "error" && (
-                <div className="flex items-center space-x-2 text-red-600 bg-red-50 p-3 rounded-lg">
+              {errors.submit && (
+                <div className="flex items-center space-x-2 text-red-500 text-sm">
                   <AlertCircle className="w-4 h-4" />
-                  <span className="text-sm">{errors.submit}</span>
+                  <p>{errors.submit}</p>
                 </div>
               )}
 
-              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={isSubmitting}>
+              <Button
+                type="submit"
+                className="w-full h-9 sm:h-10 bg-primary hover:bg-primary-dark"
+                disabled={isSubmitting}
+              >
                 {isSubmitting ? "Creating Account..." : "Create Account"}
               </Button>
-            </form>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-center text-sm text-gray-600">
                 Already have an account?{" "}
-                <Link href="/login" className="text-primary hover:underline font-medium">
-                  Login
+                <Link href="/login" className="text-primary hover:underline">
+                  Sign In
                 </Link>
               </p>
-            </div>
+            </form>
           </CardContent>
         </Card>
       </div>

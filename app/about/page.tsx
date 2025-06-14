@@ -17,6 +17,8 @@ import {
   Quote,
   Mail,
   Phone,
+  ArrowLeft,
+  Calendar,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -133,7 +135,7 @@ export default function AboutPage() {
       role: "Graphic Designer",
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/aqsa-anwar.png",
-      bio: "Aqsa brings creativity to life as a graphics designer, producing visually compelling designs for various platforms. Her artistic vision ensures that all visuals align with the organization’s brand.",
+      bio: "Aqsa brings creativity to life as a graphics designer, producing visually compelling designs for various platforms. Her artistic vision ensures that all visuals align with the organization's brand.",
       specialties: ["Educational Visuals", "Student-Focused Branding", "Creative Storytelling"],
     },
     {
@@ -205,7 +207,7 @@ export default function AboutPage() {
       role: "Public Relations",
       education: "BS Computer Science, MUET Jamshoro",
       image: "/team/faraz-hussain.png",
-      bio: "Faraz is dedicated to enhancing the organization’s presence through powerful public relations campaigns. Her expertise in media and communications helps maintain a strong, consistent brand image.",
+      bio: "Faraz is dedicated to enhancing the organization's presence through powerful public relations campaigns. Her expertise in media and communications helps maintain a strong, consistent brand image.",
       specialties: ["Public Relations Strategy", "Media Relations Management", "Brand Awareness Enhancement"],
     },
     {
@@ -312,304 +314,186 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-4 sm:py-8">
         {/* Page Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-4">About Guide Grad</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Empowering students to make informed decisions about their education journey
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-4xl font-bold text-primary mb-2 sm:mb-4">About Guide Grad</h1>
+          <p className="text-base sm:text-xl text-gray-600 max-w-3xl mx-auto">
+            Empowering students to make informed decisions about their educational future
           </p>
         </div>
 
-        {/* Navigation Tabs */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-lg p-1 shadow-md">
-            {tabs.map((tab) => (
-              <Button
-                key={tab.id}
-                variant={activeTab === tab.id ? "default" : "ghost"}
-                onClick={() => setActiveTab(tab.id)}
-                className={`mx-1 ${activeTab === tab.id ? "bg-primary text-white" : ""}`}
-              >
-                {tab.label}
-              </Button>
+        {/* Stats Section */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
+          {stats.map((stat, index) => (
+            <Card key={index} className="text-center border-primary-light">
+              <CardContent className="p-4 sm:p-6">
+                <stat.icon className="w-8 h-8 sm:w-10 sm:h-10 text-primary mx-auto mb-2 sm:mb-3" />
+                <div className="text-lg sm:text-xl font-bold text-gray-900 mb-1">{stat.value}</div>
+                <div className="text-xs sm:text-sm text-gray-600">{stat.label}</div>
+                <p className="text-xs sm:text-sm text-gray-500 mt-1">{stat.description}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Values Section */}
+        <div className="mb-8 sm:mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-primary mb-4 sm:mb-6 text-center">Our Values</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {values.map((value, index) => (
+              <Card key={index} className="border-primary-light">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="bg-primary-light w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                    <value.icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
+                  </div>
+                  <h3 className="text-base sm:text-lg font-semibold text-primary mb-2 text-center">{value.title}</h3>
+                  <p className="text-sm sm:text-base text-gray-600 mb-2">{value.description}</p>
+                  <p className="text-xs sm:text-sm text-gray-500">{value.details}</p>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
 
-        {/* Overview Tab */}
-        {activeTab === "overview" && (
-          <div className="space-y-12">
-            {/* Stats Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {stats.map((stat, index) => (
-                <Card key={index} className="text-center hover:shadow-lg transition-shadow duration-300">
-                  <CardContent className="p-6">
-                    <stat.icon className={`w-12 h-12 ${stat.color} mx-auto mb-4`} />
-                    <h3 className="text-3xl font-bold text-primary mb-2">{stat.value}</h3>
-                    <p className="text-lg font-semibold text-gray-700 mb-1">{stat.label}</p>
-                    <p className="text-sm text-gray-500">{stat.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {/* Mission & Vision */}
-            <div className="grid md:grid-cols-2 gap-8">
-              <Card className="bg-primary-light border-primary-light">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-primary">Our Mission</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-700 leading-relaxed">
-                    To democratize access to quality education by providing comprehensive, personalized guidance that
-                    empowers every student to achieve their academic and career aspirations, regardless of their
-                    background or circumstances.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-primary-light border-primary-light">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-primary">Our Vision</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-700 leading-relaxed">
-                    To become the leading education consultancy in Pakistan, recognized for innovation, integrity, and
-                    impact in transforming lives through education. We envision a Pakistan where every student has equal
-                    access to quality guidance.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Values Section */}
-            <div>
-              <h2 className="text-3xl font-bold text-center text-primary mb-8">Our Core Values</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {values.map((value, index) => (
-                  <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
-                    <CardContent className="p-6">
-                      <div className="flex items-start space-x-4">
-                        <div className="bg-primary-light p-3 rounded-lg">
-                          <value.icon className="w-8 h-8 text-primary" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="text-xl font-bold text-primary mb-2">{value.title}</h3>
-                          <p className="text-gray-600 mb-3">{value.description}</p>
-                          <p className="text-sm text-gray-500">{value.details}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Team Tab */}
-        {activeTab === "team" && (
-          <div className="space-y-8">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-primary mb-4">Meet Our Expert Team</h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Our diverse team of education experts brings together decades of experience in admissions, counseling,
-                and student success.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {team.map((member, index) => (
-                <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
-                  <CardContent className="p-6">
-                    <div className="flex items-start space-x-6">
-                      <img
-                        src={member.image || "/placeholder.svg"}
-                        alt={member.name}
-                        className="w-24 h-24 rounded-full object-cover border-4 border-primary-light"
-                      />
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold text-primary mb-1">{member.name}</h3>
-                        <p className="text-primary font-semibold mb-2">{member.role}</p>
-                        <p className="text-sm text-gray-600 mb-2">{member.education}</p>
-                        <p className="text-sm text-gray-700 mb-4">{member.bio}</p>
-
-                        <div className="mb-4">
-                          <h4 className="font-semibold text-primary mb-2">Specialties:</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {member.specialties.map((specialty, idx) => (
-                              <Badge key={idx} variant="secondary" className="text-xs">
-                                {specialty}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* History Tab */}
-        {activeTab === "history" && (
-          <div className="space-y-8">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-primary mb-4">Our Journey</h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                From a small startup to Pakistan's leading education consultancy, here's how we've grown and evolved
-                over the years.
-              </p>
-            </div>
-
-            <div className="relative">
-              {/* Timeline line */}
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-primary"></div>
-
-              <div className="space-y-8">
-                {milestones.map((milestone, index) => (
-                  <div key={index} className="relative flex items-start space-x-6">
-                    {/* Timeline dot */}
-                    <div className="relative z-10 w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                      {milestone.year.slice(-2)}
-                    </div>
-
-                    <Card className="flex-1 hover:shadow-lg transition-shadow duration-300">
-                      <CardContent className="p-6">
-                        <div className="flex justify-between items-start mb-4">
-                          <h3 className="text-xl font-bold text-primary">{milestone.year}</h3>
-                          <Badge variant="outline">{milestone.impact}</Badge>
-                        </div>
-                        <h4 className="text-lg font-semibold text-primary mb-2">{milestone.event}</h4>
-                        <p className="text-gray-600 mb-3">{milestone.details}</p>
-                        <div className="flex items-center text-sm text-gray-500">
-                          <TrendingUp className="w-4 h-4 mr-2" />
-                          Impact: {milestone.impact}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Testimonials Tab */}
-        {activeTab === "testimonials" && (
-          <div className="space-y-8">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-primary mb-4">What Our Students Say</h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Don't just take our word for it. Here's what our successful students have to say about their experience
-                with Guide Grad.
-              </p>
-            </div>
-
-            {/* Featured Testimonial */}
-            <Card className="bg-primary-light border-primary-light">
-              <CardContent className="p-8">
-                <div className="text-center">
-                  <Quote className="w-12 h-12 text-primary mx-auto mb-4" />
-                  <p className="text-xl text-gray-700 mb-6 italic leading-relaxed">
-                    "{testimonials[currentTestimonial].content}"
-                  </p>
-                  <div className="flex items-center justify-center space-x-4">
+        {/* Team Section */}
+        <div className="mb-8 sm:mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-primary mb-4 sm:mb-6 text-center">Our Team</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+            {team.map((member, index) => (
+              <Card key={index} className="border-primary-light">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="aspect-square w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-3 sm:mb-4 rounded-full overflow-hidden">
                     <img
-                      src={testimonials[currentTestimonial].image || "/placeholder.svg"}
-                      alt={testimonials[currentTestimonial].name}
-                      className="w-16 h-16 rounded-full object-cover border-4 border-white shadow-lg"
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover"
                     />
-                    <div className="text-left">
-                      <h4 className="font-bold text-primary">{testimonials[currentTestimonial].name}</h4>
-                      <p className="text-primary">{testimonials[currentTestimonial].role}</p>
-                      <p className="text-sm text-gray-500">{testimonials[currentTestimonial].year}</p>
-                    </div>
                   </div>
-                  <div className="flex justify-center mt-4">
-                    {Array.from({ length: testimonials[currentTestimonial].rating }).map((_, i) => (
-                      <Star key={i} className="w-5 h-5 text-primary fill-current" />
+                  <h3 className="text-base sm:text-lg font-semibold text-primary mb-1 text-center">{member.name}</h3>
+                  <p className="text-sm sm:text-base text-gray-600 mb-2 text-center">{member.role}</p>
+                  <p className="text-xs sm:text-sm text-gray-500 mb-3">{member.bio}</p>
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {member.specialties.map((specialty, idx) => (
+                      <Badge key={idx} variant="secondary" className="text-xs">
+                        {specialty}
+                      </Badge>
                     ))}
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* All Testimonials Grid */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {testimonials.map((testimonial, index) => (
-                <Card
-                  key={index}
-                  className={`hover:shadow-lg transition-all duration-300 ${index === currentTestimonial ? "ring-2 ring-primary" : ""}`}
-                >
-                  <CardContent className="p-6">
-                    <div className="flex items-start space-x-4">
-                      <img
-                        src={testimonial.image || "/placeholder.svg"}
-                        alt={testimonial.name}
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                      <div className="flex-1">
-                        <div className="flex justify-between items-start mb-2">
-                          <div>
-                            <h4 className="font-semibold text-primary">{testimonial.name}</h4>
-                            <p className="text-primary">{testimonial.role}</p>
-                            <p className="text-xs text-gray-500">{testimonial.year}</p>
-                          </div>
-                          <div className="flex">
-                            {Array.from({ length: testimonial.rating }).map((_, i) => (
-                              <Star key={i} className="w-4 h-4 text-primary fill-current" />
-                            ))}
-                          </div>
-                        </div>
-                        <p className="text-gray-600 text-sm italic">"{testimonial.content}"</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {/* Testimonial Navigation */}
-            <div className="flex justify-center space-x-2">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentTestimonial(index)}
-                  className={`w-3 h-3 rounded-full transition-colors ${index === currentTestimonial ? "bg-primary" : "bg-gray-300"
-                    }`}
-                />
-              ))}
-            </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-        )}
+        </div>
 
-        {/* Call to Action */}
-        <Card className="bg-primary text-white mt-12">
-          <CardContent className="p-8 text-center">
-            <h2 className="text-3xl font-bold mb-4">Ready to Start Your Journey?</h2>
-            <p className="text-xl mb-6 opacity-90">
-              Join thousands of successful students who have achieved their dreams with Guide Grad
-            </p>
-            <div className="flex justify-center space-x-4">
-              <Link href="/contact">
-                <Button size="lg" variant="secondary">
-                  <Mail className="w-5 h-5 mr-2" />
-                  Contact Us Today
-                </Button>
-              </Link>
-              <Link href="/book-call">
-                <Button size="lg" variant="secondary">
-                  <Phone className="w-5 h-5 mr-2" />
-                  Book Free Consultation
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Milestones Section */}
+        <div className="mb-8 sm:mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-primary mb-4 sm:mb-6 text-center">Our Journey</h2>
+          <div className="space-y-4 sm:space-y-6">
+            {milestones.map((milestone, index) => (
+              <Card key={index} className="border-primary-light">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-primary-light rounded-full p-2 sm:p-3">
+                      <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="text-base sm:text-lg font-semibold text-primary mb-1">{milestone.year}</h3>
+                      <p className="text-sm sm:text-base text-gray-600 mb-2">{milestone.event}</p>
+                      <p className="text-xs sm:text-sm text-gray-500">{milestone.details}</p>
+                      <p className="text-xs sm:text-sm text-primary mt-2">{milestone.impact}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        {/* Testimonials Section */}
+        <div className="mb-8 sm:mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-primary mb-4 sm:mb-6 text-center">What Our Students Say</h2>
+          <p className="text-sm sm:text-base text-gray-600 mb-6 text-center max-w-3xl mx-auto">
+            Don't just take our word for it. Here's what our successful students have to say about their experience with Guide Grad.
+          </p>
+
+          {/* Featured Testimonial */}
+          <Card className="bg-primary-light border-primary-light mb-6 sm:mb-8">
+            <CardContent className="p-4 sm:p-8">
+              <div className="text-center">
+                <Quote className="w-8 h-8 sm:w-12 sm:h-12 text-primary mx-auto mb-3 sm:mb-4" />
+                <p className="text-base sm:text-xl text-gray-700 mb-4 sm:mb-6 italic leading-relaxed">
+                  "{testimonials[currentTestimonial].content}"
+                </p>
+                <div className="flex items-center justify-center space-x-3 sm:space-x-4">
+                  <img
+                    src={testimonials[currentTestimonial].image || "/placeholder.svg"}
+                    alt={testimonials[currentTestimonial].name}
+                    className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover border-4 border-white shadow-lg"
+                  />
+                  <div className="text-left">
+                    <h4 className="font-bold text-primary text-sm sm:text-base">{testimonials[currentTestimonial].name}</h4>
+                    <p className="text-primary text-xs sm:text-sm">{testimonials[currentTestimonial].role}</p>
+                    <p className="text-xs text-gray-500">{testimonials[currentTestimonial].year}</p>
+                  </div>
+                </div>
+                <div className="flex justify-center mt-3 sm:mt-4">
+                  {Array.from({ length: testimonials[currentTestimonial].rating }).map((_, i) => (
+                    <Star key={i} className="w-4 h-4 sm:w-5 sm:h-5 text-primary fill-current" />
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* All Testimonials Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            {testimonials.map((testimonial, index) => (
+              <Card
+                key={index}
+                className={`border-primary-light ${index === currentTestimonial ? "ring-2 ring-primary" : ""}`}
+              >
+                <CardContent className="p-4 sm:p-6">
+                  <div className="flex items-start space-x-3 sm:space-x-4">
+                    <img
+                      src={testimonial.image || "/placeholder.svg"}
+                      alt={testimonial.name}
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
+                    />
+                    <div className="flex-1">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <h4 className="font-semibold text-primary text-sm sm:text-base">{testimonial.name}</h4>
+                          <p className="text-primary text-xs sm:text-sm">{testimonial.role}</p>
+                          <p className="text-xs text-gray-500">{testimonial.year}</p>
+                        </div>
+                        <div className="flex">
+                          {Array.from({ length: testimonial.rating }).map((_, i) => (
+                            <Star key={i} className="w-3 h-3 sm:w-4 sm:h-4 text-primary fill-current" />
+                          ))}
+                        </div>
+                      </div>
+                      <p className="text-gray-600 text-xs sm:text-sm italic">"{testimonial.content}"</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Testimonial Navigation */}
+          <div className="flex justify-center space-x-2 mt-4 sm:mt-6">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentTestimonial(index)}
+                className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-colors ${
+                  index === currentTestimonial ? "bg-primary" : "bg-gray-300"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )
