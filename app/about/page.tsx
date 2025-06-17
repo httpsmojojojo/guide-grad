@@ -107,6 +107,14 @@ export default function AboutPage() {
       specialties: ["Experience-Centered Design", "Strategic Visual Communication", "Inclusive Brand Identity"],
     },
     {
+      name: "Muhammad Moiz",
+      role: "Co-Founder & CTO",
+      education: "BS Computer Science, MUET Jamshoro",
+      image: "/team/muhammad-moiz.png",
+      bio: "Mohammad Moiz, Co-founder and CTO of GuideGrad, is the technological mastermind behind our mission to personalize career counseling. He guarantees the platform delivers innovative and smooth experiences, enabling students to explore their futures confidently.",
+      specialties: ["Technological Innovation", "Platform Development", "User-Centric Solutions"],
+    },
+    {
       name: "Pireh Memon",
       role: "Content Writer",
       education: "BS Computer Science, MUET Jamshoro",

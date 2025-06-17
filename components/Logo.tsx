@@ -12,9 +12,9 @@ export function Logo({ showText = true }: LogoProps) {
         <Image
           src="/logo.png"
           alt="Guide Grad Logo"
-          width={64}
-          height={64}
-          className="w-14 h-14"
+          width={128}
+          height={128}
+          className="w-128 h-128"
         />
       </div>
       {showText && (

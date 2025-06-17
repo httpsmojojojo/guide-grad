@@ -163,80 +163,36 @@ export default function AmbassadorsPage() {
         {/* Ambassador Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-stretch">
           {ambassadors.map((ambassador) => (
-            <Card key={ambassador.id} className="hover:shadow-lg transition-all duration-200 group min-h-[360px] sm:min-h-[390px] flex flex-col h-full">
-              <CardHeader className="pb-2 sm:pb-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3 sm:space-x-4">
-                    <div className="relative">
-                      <Image
-                        src={ambassador.image || "/placeholder.svg"}
-                        alt={ambassador.name}
-                        width={48}
-                        height={48}
-                        className="w-12 h-12 sm:w-[60px] sm:h-[60px] rounded-full object-cover"
-                      />
-                    </div>
-                    <div>
-                      <CardTitle className="text-base sm:text-lg group-hover:text-primary transition-colors">
-                        {ambassador.name}
-                      </CardTitle>
-                      <CardDescription className="text-xs sm:text-sm">
-                        {ambassador.university} • {ambassador.program}
-                      </CardDescription>
-                      {(ambassador as any).location && (
-                        <div className="flex items-center mt-1">
-                          <MapPin className="w-3 h-3 text-gray-400 mr-1" />
-                          <span className="text-xs text-gray-500">{(ambassador as any).location}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+            <Card key={ambassador.id} className="border-primary-light flex flex-col">
+              <CardContent className="p-4 sm:p-6 flex flex-col flex-1">
+                <div className="aspect-square w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-3 sm:mb-4 rounded-full overflow-hidden">
+                  <Image
+                    src={ambassador.image || "/placeholder.svg"}
+                    alt={ambassador.name}
+                    width={128}
+                    height={128}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              </CardHeader>
-              <CardContent className="flex flex-col flex-1 h-full p-4 sm:p-6">
-                <div className="flex flex-col flex-1">
-                  <div>
-                    <p className="text-xs sm:text-sm text-gray-600 line-clamp-3 sm:line-clamp-none">{ambassador.bio}</p>
-                    <div className="mt-3 sm:mt-4 min-h-[40px] flex flex-col justify-end">
-                      <p className="text-xs text-gray-500 mb-1 sm:mb-2">Specialties:</p>
-                      <div className="flex flex-wrap gap-1">
-                        {ambassador.specialties.length > 0 ? (
-                          ambassador.specialties.slice(0, 3).map((specialty, index) => (
-                            <Badge key={index} variant="secondary" className="text-xs bg-primary-light text-primary">
-                              {specialty}
-                            </Badge>
-                          ))
-                        ) : (
-                          <span className="invisible">No specialties</span>
-                        )}
-                        {ambassador.specialties.length > 3 && (
-                          <Badge variant="secondary" className="text-xs bg-primary-light text-primary">
-                            +{ambassador.specialties.length - 3}
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                    {(ambassador as any).languages && (ambassador as any).languages.length > 0 && (
-                      <div className="mt-2">
-                        <p className="text-xs text-gray-500 mb-1">Languages:</p>
-                        <div className="flex flex-wrap gap-1">
-                          {(ambassador as any).languages.map((lang: string, idx: number) => (
-                            <Badge key={lang + idx} variant="secondary" className="text-xs bg-primary-light text-primary whitespace-nowrap">{lang}</Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex space-x-2 mt-4 sm:mt-auto">
-                    <Button
-                      size="sm"
-                      className="flex-1 bg-primary hover:bg-primary-dark text-sm"
-                      onClick={openMessageDialog}
-                    >
-                      <MessageCircle className="w-4 h-4 mr-1" />
-                      Message
-                    </Button>
-                  </div>
+                <h3 className="text-base sm:text-lg font-semibold text-primary mb-1 text-center">{ambassador.name}</h3>
+                <p className="text-sm sm:text-base text-gray-600 mb-2 text-center">{ambassador.university} • {ambassador.program}</p>
+                <p className="text-xs sm:text-sm text-gray-500 mb-3">{ambassador.bio}</p>
+                <div className="flex flex-wrap gap-2 justify-center mb-4">
+                  {ambassador.specialties.map((specialty, idx) => (
+                    <Badge key={idx} variant="secondary" className="text-xs">
+                      {specialty}
+                    </Badge>
+                  ))}
+                </div>
+                <div className="flex space-x-2 mt-auto">
+                  <Button
+                    size="sm"
+                    className="flex-1 bg-primary hover:bg-primary-dark text-sm"
+                    onClick={openMessageDialog}
+                  >
+                    <MessageCircle className="w-4 h-4 mr-1" />
+                    Message
+                  </Button>
                 </div>
               </CardContent>
             </Card>
