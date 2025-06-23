@@ -18,42 +18,33 @@ import { authApi } from './auth'
 
 export interface University {
   id?: string
-  acceptance: string
-  address: string
-  admissionRequirements: string[]
-  campusSize: string
+  campus: string[]
   description: string
   email: string
-  facilities: string[]
-  facultyStudentRatio: string
-  founded: string
-  image: string  // Legacy field, will be deprecated
-  imageCard: string  // New field for card view (400x300px)
-  imageDetail: string  // New field for detail view (1200x800px)
-  internationalStudents: string
+  "faculty-student-ratio": string
+  image: string
+  imageCard: string
+  imageDetail: string
   location: string
   name: string
   phone: string
-  programs: string[]
-  programs_detailed: Array<{
-    name: string
-    description: string
-    duration: string
+  program_detail: Array<{
     degree: string
+    duration: string
+    name: string
   }>
+  program_offered: string[]
   ranking: string
-  rating: number
-  scholarships: string[]
-  students: string
-  tuition: string
+  scholarship: string[]
   type: string
   website: string
+  eligibility?: string // eligibility PDF link
+  fee_structure?: string // fee structure PDF link
 }
 
 export interface UniversityFilters {
   location?: string
   program?: string
-  minRating?: number
   type?: string
 }
 
@@ -76,15 +67,12 @@ export const universitiesApi = {
           constraints.push(where('location', '==', filters.location))
         }
         if (filters.program) {
-          constraints.push(where('programs', 'array-contains', filters.program))
-        }
-        if (filters.minRating) {
-          constraints.push(where('rating', '>=', filters.minRating))
+          constraints.push(where('program_offered', 'array-contains', filters.program))
         }
         
-        q = query(q, ...constraints, orderBy('rating', 'desc'), limit(10))
+        q = query(q, ...constraints, orderBy('name', 'asc'), limit(10))
       } else {
-        q = query(q, orderBy('rating', 'desc'), limit(10))
+        q = query(q, orderBy('name', 'asc'), limit(10))
       }
 
       // Apply pagination if lastDoc is provided
@@ -97,13 +85,27 @@ export const universitiesApi = {
       
       querySnapshot.forEach((doc) => {
         const data = doc.data()
-        // Ensure we're using the Firestore document ID
+        // Map the data to match the new University interface
         universities.push({ 
-          id: doc.id,  // Use Firestore document ID
-          ...data,
-          programs: data.programs || [],
-          admissionRequirements: data.admissionRequirements || [],
-          facilities: data.facilities || []
+          id: doc.id,
+          campus: data.campus || [],
+          description: data.description || '',
+          email: data.email || '',
+          "faculty-student-ratio": data["faculty-student-ratio"] || '',
+          image: data.image || '',
+          imageCard: data.imageCard || data.image || '',
+          imageDetail: data.imageDetail || data.image || '',
+          location: data.location || '',
+          name: data.name || '',
+          phone: data.phone || '',
+          program_detail: data.program_detail || [],
+          program_offered: data.program_offered || [],
+          ranking: data.ranking || '',
+          scholarship: data.scholarship || [],
+          type: data.type || '',
+          website: data.website || '',
+          eligibility: data.eligibility || '',
+          fee_structure: data.fee_structure || ''
         } as University)
       })
 
@@ -133,11 +135,25 @@ export const universitiesApi = {
         
         console.log('Found university:', { id: docSnap.id, name: data.name })
         return { 
-          id: docSnap.id,  // Use Firestore document ID
-          ...data,
-          programs: data.programs || [],
-          admissionRequirements: data.admissionRequirements || [],
-          facilities: data.facilities || []
+          id: docSnap.id,
+          campus: data.campus || [],
+          description: data.description || '',
+          email: data.email || '',
+          "faculty-student-ratio": data["faculty-student-ratio"] || '',
+          image: data.image || '',
+          imageCard: data.imageCard || data.image || '',
+          imageDetail: data.imageDetail || data.image || '',
+          location: data.location || '',
+          name: data.name || '',
+          phone: data.phone || '',
+          program_detail: data.program_detail || [],
+          program_offered: data.program_offered || [],
+          ranking: data.ranking || '',
+          scholarship: data.scholarship || [],
+          type: data.type || '',
+          website: data.website || '',
+          eligibility: data.eligibility || '',
+          fee_structure: data.fee_structure || ''
         } as University
       }
       console.log('University not found with ID:', id)

@@ -18,6 +18,7 @@ import {
   Users,
   DollarSign,
   CheckCircle,
+  Building,
 } from "lucide-react"
 import Link from "next/link"
 import { universitiesApi } from "@/lib/api"
@@ -122,7 +123,7 @@ export default function UniversitiesPage() {
   const filteredUniversities = universities.filter(university => {
     return (
       university.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      university.programs.some(program => program.toLowerCase().includes(searchQuery.toLowerCase()))
+      university.program_offered.some(program => program.toLowerCase().includes(searchQuery.toLowerCase()))
     )
   })
 
@@ -201,11 +202,9 @@ export default function UniversitiesPage() {
             const location = university.location;
             const type = university.type;
             const ranking = university.ranking;
-            const students = university.students;
-            const tuition = university.tuition;
-            const acceptance = university.acceptance;
-            const programs = university.programs;
-            const rating = university.rating;
+            const campus = university.campus;
+            const facultyStudentRatio = university["faculty-student-ratio"];
+            const programOffered = university.program_offered;
             const image = university.imageCard || university.image;
             const website = university.website;
             
@@ -243,49 +242,43 @@ export default function UniversitiesPage() {
                       {ranking && (
                         <Badge variant="secondary" className="text-xs">Rank #{ranking}</Badge>
                       )}
-                      {rating && (
-                        <div className="flex items-center gap-1">
-                          <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                          <span className="text-xs text-gray-600">{rating.toFixed(1)}</span>
-                        </div>
-                      )}
                     </div>
                   </div>
                   {/* Stats row */}
                   <div className="flex justify-between text-xs text-gray-600 bg-gray-50 rounded-lg px-3 py-2 mt-2">
-                    {students && (
+                    {campus && campus.length > 0 && (
+                      <div className="flex flex-col items-center">
+                        <Building className="w-4 h-4 mb-1" />
+                        <span className="font-medium">{campus.length}</span>
+                        <span>Campus</span>
+                      </div>
+                    )}
+                    {facultyStudentRatio && (
                       <div className="flex flex-col items-center">
                         <Users className="w-4 h-4 mb-1" />
-                        <span className="font-medium">{students.toLocaleString()}</span>
-                        <span>Students</span>
+                        <span className="font-medium">{facultyStudentRatio}</span>
+                        <span>Faculty-Student</span>
                       </div>
                     )}
-                    {tuition && (
+                    {programOffered && programOffered.length > 0 && (
                       <div className="flex flex-col items-center">
-                        <DollarSign className="w-4 h-4 mb-1" />
-                        <span className="font-medium">Rs. {tuition.toLocaleString()}</span>
-                        <span>Tuition</span>
-                      </div>
-                    )}
-                    {acceptance && (
-                      <div className="flex flex-col items-center">
-                        <CheckCircle className="w-4 h-4 mb-1" />
-                        <span className="font-medium">{acceptance}%</span>
-                        <span>Acceptance</span>
+                        <BookOpen className="w-4 h-4 mb-1" />
+                        <span className="font-medium">{programOffered.length}</span>
+                        <span>Programs</span>
                       </div>
                     )}
                   </div>
                   {/* Programs */}
-                  {programs && programs.length > 0 && (
+                  {programOffered && programOffered.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-2">
-                      {programs.slice(0, 3).map((program, index) => (
+                      {programOffered.slice(0, 3).map((program: string, index: number) => (
                         <Badge key={index} variant="outline" className="text-xs">
                           {program}
                         </Badge>
                       ))}
-                      {programs.length > 3 && (
+                      {programOffered.length > 3 && (
                         <Badge variant="outline" className="text-xs">
-                          +{programs.length - 3} more
+                          +{programOffered.length - 3} more
                         </Badge>
                       )}
                     </div>

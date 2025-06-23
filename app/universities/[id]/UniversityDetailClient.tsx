@@ -20,6 +20,7 @@ import {
   BookmarkCheck,
   BookmarkPlus,
   Calendar,
+  Users,
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -173,10 +174,13 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
                   <MapPin className="w-5 h-5 mr-1" />
                   <span>{university.location}</span>
                 </div>
-                <div className="flex items-center">
-                  <Star className="w-5 h-5 mr-1 fill-yellow-400 text-yellow-400" />
-                  <span>{university.rating}</span>
-                </div>
+                {university.ranking && (
+                  <div className="flex items-center">
+                    <Badge variant="secondary" className="text-white bg-white/20">
+                      Rank #{university.ranking}
+                    </Badge>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -186,30 +190,30 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <Card>
             <CardContent className="p-6 text-center">
-              <DollarSign className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">{university.tuition}</div>
-              <div className="text-sm text-gray-600">Annual Tuition</div>
+              <Users className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+              <div className="text-2xl font-bold text-gray-900">{university["faculty-student-ratio"]}</div>
+              <div className="text-sm text-gray-600">Faculty-Student Ratio</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <GraduationCap className="w-8 h-8 text-green-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">{university.acceptance}</div>
-              <div className="text-sm text-gray-600">Acceptance Rate</div>
+              <Building className="w-8 h-8 text-green-600 mx-auto mb-2" />
+              <div className="text-2xl font-bold text-gray-900">{university.campus.length}</div>
+              <div className="text-sm text-gray-600">Campus Locations</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <Building className="w-8 h-8 text-purple-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">{university.facilities.length}</div>
-              <div className="text-sm text-gray-600">Facilities</div>
+              <BookOpen className="w-8 h-8 text-purple-600 mx-auto mb-2" />
+              <div className="text-2xl font-bold text-gray-900">{university.program_offered.length}</div>
+              <div className="text-sm text-gray-600">Programs Offered</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <BookOpen className="w-8 h-8 text-orange-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">{university.programs.length}</div>
-              <div className="text-sm text-gray-600">Programs</div>
+              <GraduationCap className="w-8 h-8 text-orange-600 mx-auto mb-2" />
+              <div className="text-2xl font-bold text-gray-900">{university.program_detail.length}</div>
+              <div className="text-sm text-gray-600">Detailed Programs</div>
             </CardContent>
           </Card>
         </div>
@@ -222,13 +226,45 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="programs">Programs</TabsTrigger>
-                <TabsTrigger value="facilities">Facilities</TabsTrigger>
+                <TabsTrigger value="campus">Campus</TabsTrigger>
               </TabsList>
               <TabsContent value="overview" className="mt-6">
                 <Card>
                   <CardContent className="p-6">
                     <h2 className="text-xl font-semibold mb-4">About {university.name}</h2>
                     <p className="text-gray-600 mb-6">{university.description}</p>
+                    <div className="flex flex-wrap gap-4 mb-6">
+                      {university.eligibility ? (
+                        <a
+                          href={university.eligibility}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button variant="outline" className="flex items-center gap-2">
+                            <BookOpen className="w-4 h-4" /> Eligibility Criteria
+                          </Button>
+                        </a>
+                      ) : (
+                        <Button variant="outline" className="flex items-center gap-2" disabled>
+                          <BookOpen className="w-4 h-4" /> Eligibility Criteria
+                        </Button>
+                      )}
+                      {university.fee_structure ? (
+                        <a
+                          href={university.fee_structure}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button variant="outline" className="flex items-center gap-2">
+                            <DollarSign className="w-4 h-4" /> Fee Structure
+                          </Button>
+                        </a>
+                      ) : (
+                        <Button variant="outline" className="flex items-center gap-2" disabled>
+                          <DollarSign className="w-4 h-4" /> Fee Structure
+                        </Button>
+                      )}
+                    </div>
                     <div className="space-y-4">
                       <div className="flex items-start">
                         <Globe className="w-5 h-5 text-gray-400 mr-3 mt-1" />
@@ -250,8 +286,8 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
                       <div className="flex items-start">
                         <MapPin className="w-5 h-5 text-gray-400 mr-3 mt-1" />
                         <div>
-                          <h3 className="font-medium">Address</h3>
-                          <p className="text-gray-600">{university.address}</p>
+                          <h3 className="font-medium">Location</h3>
+                          <p className="text-gray-600">{university.location}</p>
                         </div>
                       </div>
                     </div>
@@ -262,8 +298,40 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
                 <Card>
                   <CardContent className="p-6">
                     <h2 className="text-xl font-semibold mb-4">Available Programs</h2>
+                    <div className="flex flex-wrap gap-4 mb-6">
+                      {university.eligibility ? (
+                        <a
+                          href={university.eligibility}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button variant="outline" className="flex items-center gap-2">
+                            <BookOpen className="w-4 h-4" /> Eligibility Criteria
+                          </Button>
+                        </a>
+                      ) : (
+                        <Button variant="outline" className="flex items-center gap-2" disabled>
+                          <BookOpen className="w-4 h-4" /> Eligibility Criteria
+                        </Button>
+                      )}
+                      {university.fee_structure ? (
+                        <a
+                          href={university.fee_structure}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button variant="outline" className="flex items-center gap-2">
+                            <DollarSign className="w-4 h-4" /> Fee Structure
+                          </Button>
+                        </a>
+                      ) : (
+                        <Button variant="outline" className="flex items-center gap-2" disabled>
+                          <DollarSign className="w-4 h-4" /> Fee Structure
+                        </Button>
+                      )}
+                    </div>
                     <div className="space-y-4">
-                      {university.programs_detailed.map((program, index) => (
+                      {university.program_detail.map((program: any, index: number) => (
                         <div key={index} className="border rounded-lg p-4">
                           <h3 className="font-medium mb-2">{program.name}</h3>
                           <p className="text-gray-600 mb-2">{program.description}</p>
@@ -281,15 +349,47 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
                   </CardContent>
                 </Card>
               </TabsContent>
-              <TabsContent value="facilities" className="mt-6">
+              <TabsContent value="campus" className="mt-6">
                 <Card>
                   <CardContent className="p-6">
-                    <h2 className="text-xl font-semibold mb-4">Campus Facilities</h2>
+                    <h2 className="text-xl font-semibold mb-4">Campus Locations</h2>
+                    <div className="flex flex-wrap gap-4 mb-6">
+                      {university.eligibility ? (
+                        <a
+                          href={university.eligibility}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button variant="outline" className="flex items-center gap-2">
+                            <BookOpen className="w-4 h-4" /> Eligibility Criteria
+                          </Button>
+                        </a>
+                      ) : (
+                        <Button variant="outline" className="flex items-center gap-2" disabled>
+                          <BookOpen className="w-4 h-4" /> Eligibility Criteria
+                        </Button>
+                      )}
+                      {university.fee_structure ? (
+                        <a
+                          href={university.fee_structure}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button variant="outline" className="flex items-center gap-2">
+                            <DollarSign className="w-4 h-4" /> Fee Structure
+                          </Button>
+                        </a>
+                      ) : (
+                        <Button variant="outline" className="flex items-center gap-2" disabled>
+                          <DollarSign className="w-4 h-4" /> Fee Structure
+                        </Button>
+                      )}
+                    </div>
                     <div className="grid grid-cols-2 gap-4">
-                      {university.facilities.map((facility, index) => (
+                      {university.campus.map((campusLocation: string, index: number) => (
                         <div key={index} className="flex items-center space-x-2">
                           <CheckCircle className="w-5 h-5 text-green-500" />
-                          <span>{facility}</span>
+                          <span>{campusLocation}</span>
                         </div>
                       ))}
                     </div>
@@ -307,26 +407,30 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <h4 className="font-medium mb-2">Founded</h4>
-                  <p className="text-gray-600">{university.founded}</p>
+                  <h4 className="font-medium mb-2">Type</h4>
+                  <p className="text-gray-600">{university.type}</p>
                 </div>
                 <div>
-                  <h4 className="font-medium mb-2">Campus Size</h4>
-                  <p className="text-gray-600">{university.campusSize}</p>
+                  <h4 className="font-medium mb-2">Ranking</h4>
+                  <p className="text-gray-600">{university.ranking}</p>
                 </div>
                 <div>
                   <h4 className="font-medium mb-2">Faculty-Student Ratio</h4>
-                  <p className="text-gray-600">{university.facultyStudentRatio}</p>
+                  <p className="text-gray-600">{university["faculty-student-ratio"]}</p>
                 </div>
                 <div>
-                  <h4 className="font-medium mb-2">International Students</h4>
-                  <p className="text-gray-600">{university.internationalStudents}</p>
-                </div>
-                <div>
-                  <h4 className="font-medium mb-2">Admission Requirements</h4>
+                  <h4 className="font-medium mb-2">Campus Locations</h4>
                   <ul className="list-disc list-inside text-gray-600">
-                    {university.admissionRequirements.map((req, index) => (
-                      <li key={index}>{req}</li>
+                    {university.campus.map((campusLocation: string, index: number) => (
+                      <li key={index}>{campusLocation}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-medium mb-2">Scholarships</h4>
+                  <ul className="list-disc list-inside text-gray-600">
+                    {university.scholarship.map((scholarship: string, index: number) => (
+                      <li key={index}>{scholarship}</li>
                     ))}
                   </ul>
                 </div>
