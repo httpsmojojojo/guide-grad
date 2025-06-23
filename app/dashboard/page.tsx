@@ -566,14 +566,6 @@ export default function Dashboard() {
                                 <span className="text-gray-500">Ranking</span>
                                 <span className="font-medium">{university.ranking}</span>
                               </div>
-                              <div className="flex justify-between text-sm">
-                                <span className="text-gray-500">Programs</span>
-                                <span className="font-medium">{university.programs?.length || 0}</span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                <span className="text-gray-500">Acceptance Rate</span>
-                                <span className="font-medium">{university.acceptance}%</span>
-                              </div>
                             </div>
                             <div className="mt-4 flex justify-end">
                               <Link href={`/universities/${university.id}`}>

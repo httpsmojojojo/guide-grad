@@ -167,8 +167,26 @@ export default function UniversityDetailClient({ id }: UniversityDetailClientPro
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
-            <div className="p-6 text-white">
+            <div className="p-6 text-white flex items-center gap-4">
               <h1 className="text-4xl font-bold mb-2">{university.name}</h1>
+              {/* Save/Unsave Button */}
+              <button
+                className="ml-2 bg-white/80 hover:bg-white text-primary rounded-full p-2 shadow focus:outline-none"
+                onClick={handleSaveToggle}
+                disabled={isSaving}
+                title={isSaved ? 'Unsave' : 'Save'}
+                aria-label={isSaved ? 'Unsave university' : 'Save university'}
+              >
+                {isSaving ? (
+                  <Loader2 className="w-5 h-5 animate-spin text-primary" />
+                ) : isSaved ? (
+                  <BookmarkCheck className="w-5 h-5 text-primary" />
+                ) : (
+                  <BookmarkPlus className="w-5 h-5 text-gray-400" />
+                )}
+              </button>
+            </div>
+            <div className="p-6 text-white">
               <div className="flex items-center gap-4">
                 <div className="flex items-center">
                   <MapPin className="w-5 h-5 mr-1" />

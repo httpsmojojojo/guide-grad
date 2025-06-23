@@ -31,10 +31,12 @@ import Link from "next/link"
 import Image from "next/image"
 import { ambassadorsApi, type Ambassador } from "@/lib/api"
 import { toast } from "sonner"
-import { SuccessModal } from "@/components/SuccessModal"
-import { ErrorModal } from "@/components/ErrorModal"
-import { InfoModal } from "@/components/InfoModal"
-import { Modal, ModalContent } from "@/components/ui/modal"
+import dynamic from "next/dynamic"
+
+const SuccessModal = dynamic(() => import("@/components/SuccessModal").then(m => ({ default: m.SuccessModal })), { loading: () => <div>Loading...</div> })
+const ErrorModal = dynamic(() => import("@/components/ErrorModal").then(m => ({ default: m.ErrorModal })), { loading: () => <div>Loading...</div> })
+const InfoModal = dynamic(() => import("@/components/InfoModal").then(m => ({ default: m.InfoModal })), { loading: () => <div>Loading...</div> })
+const Modal = dynamic(() => import("@/components/ui/modal").then(m => ({ default: m.Modal })), { loading: () => <div>Loading...</div> })
 
 export default function AmbassadorsPage() {
   const [ambassadors, setAmbassadors] = useState<Ambassador[]>([])

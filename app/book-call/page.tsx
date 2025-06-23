@@ -12,12 +12,15 @@ import { Badge } from "@/components/ui/badge"
 import { BookOpen, CalendarIcon, Clock, User, Phone, Video, ArrowLeft, CheckCircle, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { Logo } from "@/components/Logo"
-import DatePicker from "react-datepicker"
+import dynamic from "next/dynamic"
 import "react-datepicker/dist/react-datepicker.css"
-import { SuccessModal } from "@/components/SuccessModal"
-import { ErrorModal } from "@/components/ErrorModal"
 import { bookingsApi } from "@/lib/api/bookings"
 import type { BookingFormData } from "@/lib/api/bookings"
+
+const SuccessModal = dynamic(() => import("@/components/SuccessModal").then(m => ({ default: m.SuccessModal })), { loading: () => <div>Loading...</div> })
+const ErrorModal = dynamic(() => import("@/components/ErrorModal").then(m => ({ default: m.ErrorModal })), { loading: () => <div>Loading...</div> })
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const DatePicker = dynamic<any>(() => import("react-datepicker").then(m => ({ default: m.default })), { loading: () => <div>Loading date picker...</div>, ssr: false })
 
 export default function BookCallPage() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())

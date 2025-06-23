@@ -24,10 +24,12 @@ import {
   ArrowLeft,
 } from "lucide-react"
 import Link from "next/link"
-import { SuccessModal } from "@/components/SuccessModal"
-import { ErrorModal } from "@/components/ErrorModal"
+import dynamic from "next/dynamic"
 import { contactApi } from "@/lib/api/contact"
 import type { ContactFormData } from "@/lib/api/contact"
+
+const SuccessModal = dynamic(() => import("@/components/SuccessModal").then(m => ({ default: m.SuccessModal })), { loading: () => <div>Loading...</div> })
+const ErrorModal = dynamic(() => import("@/components/ErrorModal").then(m => ({ default: m.ErrorModal })), { loading: () => <div>Loading...</div> })
 
 export default function ContactPage() {
   const [formData, setFormData] = useState<ContactFormData>({

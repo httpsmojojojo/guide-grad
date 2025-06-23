@@ -207,9 +207,27 @@ export default function UniversitiesPage() {
             const programOffered = university.program_offered;
             const image = university.imageCard || university.image;
             const website = university.website;
+            const isSaved = savedUniversities.includes(university.id ?? '');
+            const saving = isSaving === (university.id ?? '');
             
             return (
-              <Card key={university.id} className="flex flex-col items-stretch border border-gray-200 shadow-md rounded-xl overflow-hidden bg-white hover:shadow-lg transition-shadow duration-200">
+              <Card key={university.id ?? ''} className="flex flex-col items-stretch border border-gray-200 shadow-md rounded-xl overflow-hidden bg-white hover:shadow-lg transition-shadow duration-200 relative">
+                {/* Save/Unsave Button */}
+                <button
+                  className="absolute top-3 right-3 z-10 bg-white rounded-full p-2 shadow hover:bg-gray-100 focus:outline-none"
+                  onClick={() => handleSaveUniversity(university.id ?? '')}
+                  disabled={saving}
+                  title={isSaved ? 'Unsave' : 'Save'}
+                  aria-label={isSaved ? 'Unsave university' : 'Save university'}
+                >
+                  {saving ? (
+                    <Loader2 className="w-5 h-5 animate-spin text-primary" />
+                  ) : isSaved ? (
+                    <BookmarkCheck className="w-5 h-5 text-primary" />
+                  ) : (
+                    <BookmarkPlus className="w-5 h-5 text-gray-400" />
+                  )}
+                </button>
                 {/* Image on top */}
                 <div className="w-full h-[200px] bg-gray-50 relative">
                   <img
@@ -285,7 +303,7 @@ export default function UniversitiesPage() {
                   )}
                   {/* Action buttons */}
                   <div className="flex gap-2 mt-4">
-                    <Link href={`/universities/${university.id}`} className="flex-1">
+                    <Link href={`/universities/${university.id ?? ''}`} className="flex-1">
                       <Button className="w-full">View Details</Button>
                     </Link>
                     {website && (

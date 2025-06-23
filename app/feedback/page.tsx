@@ -1,4 +1,6 @@
-import { FeedbackForm } from "./FeedbackForm"
+import dynamic from "next/dynamic"
+
+const FeedbackForm = dynamic(() => import("./FeedbackForm").then(m => ({ default: m.FeedbackForm })), { loading: () => <div>Loading feedback form...</div> })
 
 export default function FeedbackPage() {
   return (
