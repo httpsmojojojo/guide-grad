@@ -16,7 +16,7 @@ interface ContactForm {
   email: string
   phone: string
   message: string
-  createdAt: string
+  createdAt: Date | string
 }
 
 interface BookCallForm {
@@ -24,10 +24,9 @@ interface BookCallForm {
   name: string
   email: string
   phone: string
-  preferredDate: string
-  preferredTime: string
   message: string
-  createdAt: string
+  date?: Date | string
+  createdAt: Date | string
 }
 
 interface FeedbackForm {
@@ -88,7 +87,8 @@ export default function AdminDashboard() {
         const contactSnapshot = await getDocs(contactQuery)
         const contactData = contactSnapshot.docs.map(doc => ({
           id: doc.id,
-          ...doc.data()
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate ? doc.data().createdAt.toDate() : ""
         })) as ContactForm[]
         setContactForms(contactData)
 
@@ -97,7 +97,9 @@ export default function AdminDashboard() {
         const bookCallSnapshot = await getDocs(bookCallQuery)
         const bookCallData = bookCallSnapshot.docs.map(doc => ({
           id: doc.id,
-          ...doc.data()
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate ? doc.data().createdAt.toDate() : "",
+          date: doc.data().date?.toDate ? doc.data().date.toDate() : ""
         })) as BookCallForm[]
         setBookCallForms(bookCallData)
 
@@ -256,12 +258,12 @@ export default function AdminDashboard() {
                               <p>{form.phone}</p>
                             </div>
                             <div>
-                              <p className="font-semibold">Preferred Date</p>
-                              <p>{form.preferredDate}</p>
+                              <p className="font-semibold">Date</p>
+                              <p>{form.date ? new Date(form.date).toLocaleDateString() : ''}</p>
                             </div>
                             <div>
-                              <p className="font-semibold">Preferred Time</p>
-                              <p>{form.preferredTime}</p>
+                              <p className="font-semibold">Time</p>
+                              <p>{form.date ? new Date(form.date).toLocaleTimeString() : ''}</p>
                             </div>
                             <div>
                               <p className="font-semibold">Date Submitted</p>
